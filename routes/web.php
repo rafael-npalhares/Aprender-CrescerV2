@@ -21,7 +21,7 @@ use App\Http\Controllers\Professor\ReservaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('login');
+    return view('auth/login');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -31,13 +31,23 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 //Rotas de admin 
 Route::middleware(['auth', 'role:admin']) ->prefix('admin')->name('admin.')->group(function(){
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    Route::resource('usuarios', UsuarioController::class);
-    Route::resource('turmas', TurmaController::class);
+    Route::resource('/usuarios', UsuarioController::class);
+    Route::resource('/turmas', TurmaController::class);
+    Route::resource('/avisos', AvisoController::class);
+    Route::resource('/grade', GradeHorarioController::class);
+    Route::get('/reservas', [ReservaAdminController::class, 'index'])->name('reservas.index');
+    Route::patch('/reservas/{reserva}/aprovar', [ReservaAdminController::class, 'aprovar'])->name('reservas.aprovar');
+    Route::patch('/reservas/{reserva}/negar', [ReservaAdminController::class, 'negar'])->name('reservas.negar');
+    Route::delete('/reservas/{reserva}', [ReservaAdminController::class, 'destroy'])->name('reservas.destroy');
 });
 
 //Rotas de professor  
 Route::middleware(['auth', 'role:professor']) ->prefix('professor')->name('professor.')->group(function(){
-    Route::get('/dashboard', [ProfessorController::class, 'index']) -> name('dashboard');
+    Route::get('/dashboard', [ProfessorController::class, 'index'])->name('dashboard');
+});
+//Rotas de Aluno
+Route::middleware(['auth', 'role:aluno']) ->prefix('aluno')->name('aluno.')->group(function(){
+    Route::get('/dashboard', [AlunoController::class, 'index'])->name('dashboard');
 });
 
 Route::middleware('auth')->group(function () {
