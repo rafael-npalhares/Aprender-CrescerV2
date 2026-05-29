@@ -97,39 +97,39 @@
     </div>
 
     <ul class="nav flex-column mt-2">
-        <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a></li>
 
         <li class="mt-2 px-3" style="font-size:.72rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;">Gestão</li>
 
-        <li><a href="{{ route('admin.usuarios.index') }}" class="nav-link {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
             <i class="bi bi-people-fill"></i> Usuários
         </a></li>
 
-        <li><a href="{{ route('admin.turmas.index') }}" class="nav-link {{ request()->routeIs('admin.turmas.*') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('admin.turmas.*') ? 'active' : '' }}">
             <i class="bi bi-collection-fill"></i> Turmas
         </a></li>
 
-        <li><a href="{{ route('admin.avisos.index') }}" class="nav-link {{ request()->routeIs('admin.avisos.*') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('admin.avisos.*') ? 'active' : '' }}">
             <i class="bi bi-megaphone-fill"></i> Avisos
         </a></li>
 
-        <li><a href="{{ route('admin.reservas.index') }}" class="nav-link {{ request()->routeIs('admin.reservas.*') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('admin.reservas.*') ? 'active' : '' }}">
             <i class="bi bi-calendar-check-fill"></i> Reservas
         </a></li>
 
-        <li><a href="{{ route('admin.horarios.index') }}" class="nav-link {{ request()->routeIs('admin.horarios.*') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('admin.horarios.*') ? 'active' : '' }}">
             <i class="bi bi-grid-3x3-gap-fill"></i> Horários
         </a></li>
 
         <li class="mt-2 px-3" style="font-size:.72rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;">Módulos</li>
 
-        <li><a href="{{ route('biblioteca.index') }}" class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
             <i class="bi bi-book-fill"></i> Biblioteca
         </a></li>
 
-        <li><a href="{{ route('cantina.index') }}" class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
+        <li><a href="#" class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
             <i class="bi bi-bag-fill"></i> Cantina
         </a></li>
     </ul>
