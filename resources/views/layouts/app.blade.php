@@ -80,11 +80,11 @@
             </a></li>
         @endif
 
-        <li><a href="{{ route('biblioteca.index') }}" class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
+        <li><a  class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
             <i class="bi bi-book-fill"></i> Biblioteca
         </a></li>
 
-        <li><a href="{{ route('cantina.index') }}" class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
+        <li><a  class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
             <i class="bi bi-bag-fill"></i> Cantina
         </a></li>
     </ul>

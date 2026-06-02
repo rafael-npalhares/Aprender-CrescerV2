@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo', 'Aprender & Crescer')</title>
 
-    {{-- Bootstrap 5 CDN --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    {{-- Bootstrap Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
@@ -24,7 +22,6 @@
 
         body { background: var(--page-bg); }
 
-        /* Sidebar */
         #sidebar {
             width: 250px;
             min-height: 100vh;
@@ -60,7 +57,6 @@
         }
         #sidebar .sidebar-footer { margin-top: auto; padding: 1rem; }
 
-        /* Topbar */
         #topbar {
             margin-left: 250px;
             height: 60px;
@@ -75,7 +71,6 @@
             justify-content: space-between;
         }
 
-        /* Main content */
         #main-content {
             margin-left: 250px;
             padding: 1.75rem;
@@ -97,39 +92,39 @@
     </div>
 
     <ul class="nav flex-column mt-2">
-        <li><a href="#" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a></li>
 
         <li class="mt-2 px-3" style="font-size:.72rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;">Gestão</li>
 
-        <li><a href="#" class="nav-link {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.usuarios.index') }}" class="nav-link {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
             <i class="bi bi-people-fill"></i> Usuários
         </a></li>
 
-        <li><a href="#" class="nav-link {{ request()->routeIs('admin.turmas.*') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.turmas.index') }}" class="nav-link {{ request()->routeIs('admin.turmas.*') ? 'active' : '' }}">
             <i class="bi bi-collection-fill"></i> Turmas
         </a></li>
 
-        <li><a href="#" class="nav-link {{ request()->routeIs('admin.avisos.*') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.avisos.index') }}" class="nav-link {{ request()->routeIs('admin.avisos.*') ? 'active' : '' }}">
             <i class="bi bi-megaphone-fill"></i> Avisos
         </a></li>
 
-        <li><a href="#" class="nav-link {{ request()->routeIs('admin.reservas.*') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.reservas.index') }}" class="nav-link {{ request()->routeIs('admin.reservas.*') ? 'active' : '' }}">
             <i class="bi bi-calendar-check-fill"></i> Reservas
         </a></li>
 
-        <li><a href="#" class="nav-link {{ request()->routeIs('admin.horarios.*') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.grade.index') }}" class="nav-link {{ request()->routeIs('admin.grade.*') ? 'active' : '' }}">
             <i class="bi bi-grid-3x3-gap-fill"></i> Horários
         </a></li>
 
         <li class="mt-2 px-3" style="font-size:.72rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;">Módulos</li>
 
-        <li><a href="#" class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.biblioteca.index') }}" class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
             <i class="bi bi-book-fill"></i> Biblioteca
         </a></li>
 
-        <li><a href="#" class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
+        <li><a href="{{ route('admin.cantina.index') }}" class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
             <i class="bi bi-bag-fill"></i> Cantina
         </a></li>
     </ul>
@@ -158,6 +153,20 @@
 
 {{-- CONTEÚDO --}}
 <div id="main-content">
+    @if(session('sucesso'))
+        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ session('sucesso') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('erro'))
+        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>{{ session('erro') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     @yield('conteudo')
 </div>
 
