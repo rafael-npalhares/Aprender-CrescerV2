@@ -19,6 +19,13 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+use App\Http\Controllers\Auth\ResetSenhaController;
+
+Route::get('/esqueci-senha', [ResetSenhaController::class, 'formulario'])->name('esqueci.senha.form');
+Route::post('/verificar-usuario', [ResetSenhaController::class, 'verificar'])->name('verificar.usuario');
+Route::get('/nova-senha', [ResetSenhaController::class, 'novaSenhaForm'])->name('nova.senha.form');
+Route::post('/salvar-nova-senha', [ResetSenhaController::class, 'salvar'])->name('salvar.nova.senha');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
