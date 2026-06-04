@@ -14,21 +14,25 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
+            --bg:         #0f1623;
             --sidebar-bg: #1a2238;
+            --card-bg:    #1e2a3a;
             --blue:       #2d6ef7;
-            --page-bg:    #f0f2f5;
-            --border:     #e8eaf0;
-            --text:       #1a2238;
+            --border:     rgba(255,255,255,.08);
+            --text:       #e8edf5;
             --muted:      #8899bb;
+            --input-bg:   #141d2e;
         }
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background: var(--page-bg);
+            background: var(--bg);
             min-height: 100vh;
             display: flex;
+            color: var(--text);
         }
 
+        /* ── LEFT PANEL ── */
         .panel-left {
             width: 420px;
             min-height: 100vh;
@@ -40,13 +44,14 @@
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
+            border-right: 1px solid var(--border);
         }
         .panel-left::before {
             content: '';
             position: absolute;
             width: 380px; height: 380px;
             border-radius: 50%;
-            background: rgba(45,110,247,.12);
+            background: rgba(45,110,247,.10);
             top: -80px; right: -100px;
         }
         .panel-left::after {
@@ -54,7 +59,7 @@
             position: absolute;
             width: 260px; height: 260px;
             border-radius: 50%;
-            background: rgba(45,110,247,.08);
+            background: rgba(45,110,247,.06);
             bottom: 60px; left: -80px;
         }
 
@@ -83,8 +88,8 @@
         .panel-steps { position: relative; z-index: 1; display: flex; flex-direction: column; gap: .75rem; }
         .step-item {
             display: flex; align-items: center; gap: .75rem;
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.04);
+            border: 1px solid var(--border);
             border-radius: 10px; padding: .7rem 1rem;
         }
         .step-num {
@@ -93,15 +98,20 @@
             font-size: .75rem; font-weight: 700;
             display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .step-item span { color: rgba(255,255,255,.75); font-size: .85rem; }
+        .step-item span { color: rgba(255,255,255,.65); font-size: .85rem; }
 
+        /* ── RIGHT PANEL ── */
         .panel-right {
             flex: 1; display: flex;
             align-items: center; justify-content: center; padding: 2rem;
         }
 
         .card-form {
-            width: 100%; max-width: 400px;
+            width: 100%; max-width: 420px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem 2.25rem;
             animation: fadeUp .45s ease both;
         }
 
@@ -111,7 +121,9 @@
         }
 
         .card-icon {
-            width: 56px; height: 56px; background: #e8f0fe;
+            width: 56px; height: 56px;
+            background: rgba(45,110,247,.15);
+            border: 1px solid rgba(45,110,247,.3);
             border-radius: 16px; display: flex; align-items: center;
             justify-content: center; font-size: 1.6rem; color: var(--blue);
             margin-bottom: 1.25rem;
@@ -127,27 +139,34 @@
         }
 
         .form-label {
-            font-size: .82rem; font-weight: 600; color: var(--text);
+            font-size: .82rem; font-weight: 600; color: var(--muted);
             text-transform: uppercase; letter-spacing: .05em; margin-bottom: .4rem;
         }
 
-        .input-group-custom { position: relative; margin-bottom: 1.25rem; }
+        .input-wrap { position: relative; margin-bottom: 1.25rem; }
         .input-icon {
             position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
             color: var(--muted); font-size: 1rem; pointer-events: none; z-index: 2;
         }
         .form-control {
             padding-left: 2.6rem !important;
-            height: 48px; border: 1.5px solid var(--border);
-            border-radius: 10px; font-size: .92rem; color: var(--text);
-            background: #fff; transition: border-color .2s, box-shadow .2s;
+            height: 48px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px; font-size: .92rem;
+            color: var(--text);
+            background: var(--input-bg);
+            transition: border-color .2s, box-shadow .2s;
         }
+        .form-control::placeholder { color: #3d4f6e; }
         .form-control:focus {
             border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(45,110,247,.12); outline: none;
+            box-shadow: 0 0 0 3px rgba(45,110,247,.15);
+            outline: none;
+            background: var(--input-bg);
+            color: var(--text);
         }
         .form-control.is-invalid { border-color: #ef4444; }
-        .invalid-feedback { font-size: .8rem; }
+        .invalid-feedback { font-size: .8rem; color: #ef4444; }
 
         .btn-verificar {
             width: 100%; height: 48px; background: var(--blue);
@@ -164,6 +183,12 @@
             text-decoration: none; transition: color .15s;
         }
         .link-voltar:hover { color: var(--blue); }
+
+        .alert-danger {
+            background: rgba(239,68,68,.1);
+            border: 1px solid rgba(239,68,68,.25);
+            color: #f87171; border-radius: 10px; font-size: .85rem;
+        }
 
         @media (max-width: 768px) { .panel-left { display: none; } }
     </style>
@@ -214,20 +239,18 @@
                 Informe o e-mail e o nome completo cadastrados na sua conta para continuar.
             </p>
 
-            {{-- Erro geral (e-mail ou nome incorretos) --}}
             @if ($errors->has('geral'))
-                <div class="alert alert-danger py-2 mb-3" style="font-size:.85rem;border-radius:10px;">
+                <div class="alert alert-danger py-2 mb-3">
                     <i class="bi bi-exclamation-circle me-2"></i>
                     {{ $errors->first('geral') }}
                 </div>
             @endif
 
-            {{-- action="route('verificar.usuario')" chama ResetSenhaController@verificar --}}
             <form method="POST" action="{{ route('verificar.usuario') }}" novalidate>
                 @csrf
 
                 <label class="form-label">E-mail</label>
-                <div class="input-group-custom">
+                <div class="input-wrap">
                     <i class="bi bi-envelope input-icon"></i>
                     <input type="email"
                            name="email"
@@ -241,7 +264,7 @@
                 </div>
 
                 <label class="form-label">Nome completo</label>
-                <div class="input-group-custom">
+                <div class="input-wrap">
                     <i class="bi bi-person input-icon"></i>
                     <input type="text"
                            name="name"
