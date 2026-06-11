@@ -10,20 +10,38 @@ use Illuminate\Http\Request;
 
 class GradeHorarioController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $turmas   = Turma::where('ativa', true)->get();
-        $horarios = GradeHorario::with(['turma', 'professor'])->get();
+        $turmas = Turma::where('ativa', true)->orderBy('serie')->orderBy('turma')->get();
 
-        return view('admin.horarios.index', compact('turmas', 'horarios'));
+        $turmaSelecionada = null;
+        $horarios         = collect();
+
+        if ($request->turma_id) {
+            $turmaSelecionada = Turma::find($request->turma_id);
+
+            if ($turmaSelecionada) {
+                $horarios = GradeHorario::with('professor')
+                                        ->where('turma_id', $turmaSelecionada->id)
+                                        ->get();
+            }
+        }
+
+        return view('admin.horarios.index', compact('turmas', 'horarios', 'turmaSelecionada'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $turmas      = Turma::where('ativa', true)->get();
         $professores = User::where('role', 'professor')->orderBy('name')->get();
 
-        return view('admin.horarios.create', compact('turmas', 'professores'));
+        $preSelecao = [
+            'turma_id'   => $request->turma_id,
+            'dia_semana' => $request->dia_semana,
+            'aula'       => $request->aula,
+        ];
+
+        return view('admin.horarios.create', compact('turmas', 'professores', 'preSelecao'));
     }
 
     public function store(Request $request)
@@ -36,9 +54,9 @@ class GradeHorarioController extends Controller
             'aula'         => 'required|in:1,2,3,4,5,6',
         ]);
 
-        GradeHorario::create($request->all());
+        GradeHorario::create($request->only('turma_id', 'professor_id', 'disciplina', 'dia_semana', 'aula'));
 
-        return redirect()->route('admin.grade.index')
+        return redirect()->route('admin.grade.index', ['turma_id' => $request->turma_id])
                          ->with('sucesso', 'Horário adicionado!');
     }
 
@@ -60,17 +78,18 @@ class GradeHorarioController extends Controller
             'aula'         => 'required|in:1,2,3,4,5,6',
         ]);
 
-        $grade->update($request->all());
+        $grade->update($request->only('turma_id', 'professor_id', 'disciplina', 'dia_semana', 'aula'));
 
-        return redirect()->route('admin.grade.index')
+        return redirect()->route('admin.grade.index', ['turma_id' => $grade->turma_id])
                          ->with('sucesso', 'Horário atualizado!');
     }
 
     public function destroy(GradeHorario $grade)
     {
+        $turmaId = $grade->turma_id;
         $grade->delete();
 
-        return redirect()->route('admin.grade.index')
+        return redirect()->route('admin.grade.index', ['turma_id' => $turmaId])
                          ->with('sucesso', 'Horário removido!');
     }
 }

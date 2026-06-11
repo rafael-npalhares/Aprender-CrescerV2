@@ -46,6 +46,8 @@ Route::middleware(['auth', 'role:admin'])
         Route::patch('/reservas/{reserva}/aprovar', [ReservaAdminController::class, 'aprovar'])->name('reservas.aprovar');
         Route::patch('/reservas/{reserva}/negar', [ReservaAdminController::class, 'negar'])->name('reservas.negar');
         Route::delete('/reservas/{reserva}', [ReservaAdminController::class, 'destroy'])->name('reservas.destroy');
+        Route::get('/reservas/criar', [ReservaAdminController::class, 'create'])->name('reservas.create');
+        Route::post('/reservas', [ReservaAdminController::class, 'store'])->name('reservas.store');
 
         Route::get('/biblioteca', [BibliotecaController::class, 'index'])->name('biblioteca.index');
         Route::get('/biblioteca/livros/criar', [BibliotecaController::class, 'createLivro'])->name('biblioteca.livros.create');
