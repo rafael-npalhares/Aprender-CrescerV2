@@ -124,3 +124,25 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+Route::get('/biblioteca', [BibliotecaController::class, 'index'])
+->name('biblioteca.index');
+
+Route::get('/biblioteca/livros/criar', [BibliotecaController::class, 'createLivro'])
+->name('admin.biblioteca.create');
+
+Route::post('/biblioteca/livros', [BibliotecaController::class, 'storeLivro'])
+->name('biblioteca.livros.store');
+
+Route::get('/biblioteca/livros/{livro}/editar', [BibliotecaController::class, 'editLivro'])
+->name('admin.biblioteca.edit');
+
+Route::patch('/biblioteca/livros/{livro}', [BibliotecaController::class, 'updateLivro'])
+->name('biblioteca.livros.update');
+
+Route::delete('/biblioteca/livros/{livro}', [BibliotecaController::class, 'destroyLivro'])
+->name('admin.biblioteca.destroy');
+
+Route::get('/biblioteca/emprestimos', [BibliotecaController::class, 'emprestimos'])
+->name('biblioteca.emprestimos');
