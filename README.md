@@ -1,59 +1,386 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Aprender & Crescer
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow)
+![Version](https://img.shields.io/badge/Version-0.1.0-blue)
 
-## About Laravel
+Sistema web de gestão escolar desenvolvido com Laravel, focado na organização de processos acadêmicos e administrativos de instituições de ensino.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📖 Sobre o Projeto
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+O **Aprender & Crescer** é uma aplicação web que centraliza funcionalidades essenciais de uma instituição de ensino em uma única plataforma.
 
-## Learning Laravel
+O sistema foi projetado para fornecer diferentes experiências de uso para administradores, professores e alunos, permitindo o gerenciamento de usuários, turmas, biblioteca, cantina, reservas e comunicação interna.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Atualmente o projeto encontra-se em desenvolvimento contínuo, com novos módulos e funcionalidades sendo adicionados gradualmente.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## ✨ Principais Funcionalidades
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 👥 Gestão de Usuários
 
-### Premium Partners
+- Cadastro de usuários
+- Controle de perfis (Roles)
+- Autenticação segura
+- Controle de acesso por permissões
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 🎓 Gestão Acadêmica
 
-## Contributing
+- Gerenciamento de turmas
+- Grade de horários
+- Avisos institucionais
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 📚 Biblioteca
 
-## Code of Conduct
+- Consulta de livros
+- Empréstimos
+- Renovações
+- Controle de devoluções
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 🍔 Cantina
 
-## Security Vulnerabilities
+- Consulta de produtos
+- Realização de pedidos
+- Controle de estoque
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 📅 Reservas
 
-## License
+- Solicitação de reservas
+- Aprovação ou rejeição por administradores
+- Controle de status
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🧩 Módulos do Sistema
+
+| Módulo | Descrição |
+|---------|-----------|
+| Usuários | Gerenciamento de usuários e perfis |
+| Turmas | Organização das turmas escolares |
+| Avisos | Comunicação interna da instituição |
+| Biblioteca | Controle de livros e empréstimos |
+| Cantina | Controle de produtos e pedidos |
+| Reservas | Gestão de reservas de equipamentos e recursos |
+| Horários | Organização da grade escolar |
+
+---
+
+## 👤 Perfis do Sistema
+
+### Administrador
+
+Possui acesso completo ao sistema.
+
+Responsável por:
+
+- Gerenciar usuários
+- Gerenciar turmas
+- Publicar avisos
+- Gerenciar biblioteca
+- Gerenciar cantina
+- Aprovar reservas
+- Configurar horários
+
+### Professor
+
+Possui acesso às funcionalidades acadêmicas e de consulta.
+
+Pode:
+
+- Consultar avisos
+- Visualizar horários
+- Utilizar biblioteca
+- Solicitar reservas
+- Realizar pedidos na cantina
+
+### Aluno
+
+Possui acesso às funcionalidades acadêmicas disponíveis para estudantes.
+
+Pode:
+
+- Consultar avisos
+- Visualizar horários
+- Utilizar biblioteca
+- Realizar pedidos na cantina
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Backend
+
+- PHP 8.2
+- Laravel 12
+- Laravel Breeze
+
+### Frontend
+
+- Blade
+- Bootstrap 5
+
+### Banco de Dados
+
+- MySQL
+
+### Controle de Versão
+
+- Git
+- GitHub
+
+---
+
+## 🏗️ Arquitetura
+
+O projeto segue a arquitetura MVC (Model-View-Controller) disponibilizada pelo Laravel.
+
+```text
+Request
+    ↓
+Route
+    ↓
+Middleware
+    ↓
+Controller
+    ↓
+Model
+    ↓
+Database
+    ↓
+View
+```
+
+### Recursos Implementados
+
+| Recurso | Status |
+|----------|----------|
+| Autenticação | ✅ |
+| Middleware de Roles | ✅ |
+| Seeders | ✅ |
+| Laravel Breeze | ✅ |
+| CRUD de Usuários | ✅ |
+| CRUD de Turmas | 🚧 |
+| Biblioteca | 🚧 |
+| Cantina | 🚧 |
+| Reservas | 🚧 |
+| Dashboard Administrativo | ✅ |
+| Testes Automatizados | ❌ |
+| API REST | ❌ |
+
+---
+
+## 🗄️ Modelo de Dados
+
+Principais entidades atualmente presentes no sistema:
+
+- User
+- Aluno
+- Professor
+- Turma
+- Aviso
+- Reserva
+- Livro
+- Emprestimo
+- ProdutoCantina
+- PedidoCantina
+- GradeHorario
+- Equipamento
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+app/
+├── Http/
+│   ├── Controllers/
+│   ├── Middleware/
+│
+├── Models/
+│
+database/
+├── migrations/
+├── seeders/
+│
+resources/
+├── views/
+│
+routes/
+└── web.php
+```
+
+---
+
+## 🚀 Instalação
+
+### Clonar o Repositório
+
+```bash
+git clone https://github.com/rafael-npalhares/Aprender-CrescerV2.git
+```
+
+### Acessar a Pasta
+
+```bash
+cd Aprender-CrescerV2
+```
+
+### Instalar Dependências
+
+```bash
+composer install
+```
+
+### Configurar Ambiente
+
+```bash
+cp .env.example .env
+```
+
+### Gerar Chave da Aplicação
+
+```bash
+php artisan key:generate
+```
+
+### Configurar Banco de Dados
+
+Editar o arquivo `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=aprender_crescer
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### Executar Migrations
+
+```bash
+php artisan migrate
+```
+
+### Executar Seeders
+
+```bash
+php artisan db:seed
+```
+
+### Iniciar o Servidor
+
+```bash
+php artisan serve
+```
+
+A aplicação estará disponível em:
+
+```text
+http://127.0.0.1:8000
+```
+
+---
+
+## 📸 Screenshots
+
+Em breve serão adicionadas imagens das principais telas do sistema:
+
+- Login
+- Dashboard Administrativo
+- Biblioteca
+- Cantina
+- Reservas
+- Gerenciamento de Usuários
+
+---
+
+## 🗺️ Roadmap
+
+### Gestão Acadêmica
+
+- [ ] Sistema de notas
+- [ ] Controle de frequência
+- [ ] Boletim escolar
+
+### Comunicação e Segurança
+
+- [ ] Canal de denúncias anônimas
+- [ ] Solicitação de ajuda estudantil
+- [ ] Encaminhamento para coordenadores e supervisores
+
+### Novos Perfis
+
+- [ ] Coordenador
+- [ ] Supervisor
+
+### Melhorias Técnicas
+
+- [ ] API REST
+- [ ] Docker
+- [ ] Testes automatizados
+- [ ] Policies
+- [ ] Factories
+- [ ] Integração contínua (CI/CD)
+
+---
+
+## 📊 Status do Projeto
+
+🚧 **Em desenvolvimento**
+
+O sistema encontra-se em constante evolução e novas funcionalidades estão sendo implementadas gradualmente.
+
+---
+
+## 🤝 Contribuição
+
+Contribuições, sugestões e correções são bem-vindas.
+
+Para contribuir:
+
+1. Faça um Fork do projeto.
+2. Crie uma nova Branch.
+
+```bash
+git checkout -b minha-feature
+```
+
+3. Realize suas alterações.
+4. Faça o commit.
+
+```bash
+git commit -m "feat: adiciona nova funcionalidade"
+```
+
+5. Envie para seu repositório.
+
+```bash
+git push origin minha-feature
+```
+
+6. Abra um Pull Request.
+
+---
+
+## 👨‍💻 Autores
+
+Desenvolvido por:
+
+- Rafael Nunes
+- Natan Henrique
+- Murilo Camargo
+- Tiago Marghotti
+
+---
+
+## 📄 Licença
+
+Este projeto atualmente não possui uma licença definida.
+
+Todos os direitos reservados aos autores até a definição de uma licença oficial.
