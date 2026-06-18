@@ -50,12 +50,22 @@ class AvisoController extends Controller
     public function update(Request $request, Aviso $aviso)
     {
         $request->validate([
-            'titulo'       => 'required|string|max:200',
-            'conteudo'     => 'required|string',
-            'visivel_para' => 'required|in:todos,alunos,professores',
+            'titulo'         => 'required|string|max:200',
+            'conteudo'       => 'required|string',
+            'visivel_para'   => 'required|in:todos,alunos,professores',
+            'data_expiracao' => 'nullable|date|after:today',
+            'fixado'         => 'boolean',
+            'ativo'          => 'boolean',
         ]);
 
-        $aviso->update($request->only('titulo', 'conteudo', 'visivel_para', 'data_expiracao', 'fixado', 'ativo'));
+        $aviso->update($request->only(
+            'titulo',
+            'conteudo',
+            'visivel_para',
+            'data_expiracao',
+            'fixado',
+            'ativo'
+        ));
 
         return redirect()->route('admin.avisos.index')
                          ->with('sucesso', 'Aviso atualizado!');

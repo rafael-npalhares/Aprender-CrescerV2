@@ -25,19 +25,17 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'       => 'required|string|max:200',
-            'email'      => 'required|email|unique:users,email',
-            'password'   => 'required|min:8|confirmed',
-            // confirmed = exige que exista um campo password_confirmation igual
-            'role'       => 'required|in:admin,professor,aluno',
-            'matricula'  => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula',
-            // required_if:role,aluno = obrigatório só quando o perfil for aluno
+            'name'      => 'required|string|max:200',
+            'email'     => 'required|email|unique:users,email',
+            'password'  => 'required|min:8|confirmed',
+            'role'      => 'required|in:admin,professor,aluno',
+            'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula',
         ]);
 
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => $request->password, // cast 'hashed' no Model criptografa
+            'password' => $request->password,
             'role'     => $request->role,
         ]);
 
@@ -65,37 +63,41 @@ class UsuarioController extends Controller
     public function update(Request $request, User $usuario)
     {
         $request->validate([
-            'name'  => 'required|string|max:200',
-            'email' => 'required|email|unique:users,email,' . $usuario->id,
-            'role'  => 'required|in:admin,professor,aluno',
-
-            // Senha é opcional no update — só valida se o admin preencheu
-            'password' => 'nullable|min:8|confirmed',
-            // confirmed = exige password_confirmation igual, mas só se password for preenchido
-
+            'name'      => 'required|string|max:200',
+            'email'     => 'required|email|unique:users,email,' . $usuario->id,
+            'role'      => 'required|in:admin,professor,aluno',
+            'password'  => 'nullable|min:8|confirmed',
             'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula,' . optional($usuario->aluno)->id,
-            // unique com exceção do próprio registro de aluno, igual ao e-mail
         ]);
 
-        // Monta os dados que serão atualizados
         $dados = $request->only('name', 'email', 'role');
 
-        // Só atualiza a senha se o admin preencheu o campo
         if ($request->filled('password')) {
             $dados['password'] = Hash::make($request->password);
-            // Hash::make() porque aqui estamos passando já processado,
-            // diferente do store() onde o cast do Model cuida disso
         }
+
+        $roleAnterior = $usuario->role;
+        $roleNovo     = $request->role;
 
         $usuario->update($dados);
 
-        // Cria registro de professor se mudou para professor e ainda não existe
-        if ($request->role === 'professor' && !$usuario->professor) {
+        // Se mudou de role, remove o perfil anterior
+        if ($roleAnterior !== $roleNovo) {
+            if ($roleAnterior === 'professor') {
+                $usuario->professor?->delete();
+            }
+
+            if ($roleAnterior === 'aluno') {
+                $usuario->aluno?->delete();
+            }
+        }
+
+        // Cria o novo perfil se ainda não existir
+        if ($roleNovo === 'professor' && !$usuario->fresh()->professor) {
             Professor::create(['user_id' => $usuario->id, 'disciplina' => null]);
         }
 
-        // Cria registro de aluno se mudou para aluno e ainda não existe
-        if ($request->role === 'aluno' && !$usuario->aluno) {
+        if ($roleNovo === 'aluno' && !$usuario->fresh()->aluno) {
             Aluno::create([
                 'user_id'   => $usuario->id,
                 'matricula' => $request->matricula,

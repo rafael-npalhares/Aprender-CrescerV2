@@ -9,14 +9,12 @@ use Illuminate\Http\Request;
 
 class BibliotecaController extends Controller
 {
-    // Lista o acervo de livros
     public function index()
     {
         $livros = Livro::orderBy('titulo')->paginate(12);
         return view('biblioteca.index', compact('livros'));
     }
 
-    // Busca livros por título ou autor
     public function buscar(Request $request)
     {
         $livros = Livro::where('titulo', 'like', '%' . $request->q . '%')
@@ -26,13 +24,13 @@ class BibliotecaController extends Controller
         return view('biblioteca.index', compact('livros'));
     }
 
-    // Empresta um livro (RN-08: máximo 2 empréstimos simultâneos)
     public function emprestar(Request $request)
     {
         $request->validate(['livro_id' => 'required|exists:livros,id']);
 
         $emprestimosAtivos = Emprestimo::where('user_id', auth()->id())
-                                       ->where('status', 'ativo')->count();
+                                       ->where('status', 'ativo')
+                                       ->count();
 
         if ($emprestimosAtivos >= 2) {
             return back()->with('erro', 'Você já tem 2 livros emprestados.');
@@ -56,9 +54,13 @@ class BibliotecaController extends Controller
         return back()->with('sucesso', 'Livro emprestado!');
     }
 
-    // Renova empréstimo (RN-09: máximo 5 renovações)
     public function renovar(Emprestimo $emp)
     {
+        // Verifica se o empréstimo pertence ao usuário logado
+        if ($emp->user_id !== auth()->id()) {
+            abort(403, 'Ação não autorizada.');
+        }
+
         if ($emp->renovacoes >= 5) {
             return back()->with('erro', 'Limite de 5 renovações atingido.');
         }
@@ -68,9 +70,13 @@ class BibliotecaController extends Controller
         return back()->with('sucesso', 'Empréstimo renovado!');
     }
 
-    // Devolução de livro
     public function devolver(Emprestimo $emp)
     {
+        // Verifica se o empréstimo pertence ao usuário logado
+        if ($emp->user_id !== auth()->id()) {
+            abort(403, 'Ação não autorizada.');
+        }
+
         $emp->update([
             'status'         => 'devolvido',
             'data_devolucao' => now(),
@@ -81,22 +87,21 @@ class BibliotecaController extends Controller
         return back()->with('sucesso', 'Livro devolvido!');
     }
 
-    // Meus empréstimos (professor e aluno)
     public function meusEmprestimos()
     {
         $emprestimos = Emprestimo::where('user_id', auth()->id())
-                                 ->with('livro')->latest()->get();
+                                 ->with('livro')
+                                 ->latest()
+                                 ->get();
 
         return view('biblioteca.emprestimos', compact('emprestimos'));
     }
 
-    // Admin — formulário de cadastro de livro
     public function createLivro()
     {
         return view('admin.biblioteca.create');
     }
 
-    // Admin — salva novo livro no acervo
     public function storeLivro(Request $request)
     {
         $request->validate([
@@ -110,5 +115,39 @@ class BibliotecaController extends Controller
 
         return redirect()->route('admin.biblioteca.index')
                          ->with('sucesso', 'Livro adicionado!');
+    }
+
+    public function editLivro(Livro $livro)
+    {
+        return view('admin.biblioteca.edit', compact('livro'));
+    }
+
+    public function updateLivro(Request $request, Livro $livro)
+    {
+        $request->validate([
+            'titulo'         => 'required|string|max:300',
+            'autor'          => 'required|string|max:200',
+            'qtd_total'      => 'required|integer|min:1',
+            'qtd_disponivel' => 'required|integer|min:0',
+        ]);
+
+        $livro->update($request->only('titulo', 'autor', 'qtd_total', 'qtd_disponivel'));
+
+        return redirect()->route('admin.biblioteca.index')
+                         ->with('sucesso', 'Livro atualizado!');
+    }
+
+    public function destroyLivro(Livro $livro)
+    {
+        $livro->delete();
+
+        return redirect()->route('admin.biblioteca.index')
+                         ->with('sucesso', 'Livro removido!');
+    }
+
+    public function emprestimos()
+    {
+        $emprestimos = Emprestimo::with(['usuario', 'livro'])->latest()->paginate(15);
+        return view('admin.biblioteca.emprestimos', compact('emprestimos'));
     }
 }

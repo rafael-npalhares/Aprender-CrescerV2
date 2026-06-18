@@ -43,10 +43,10 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('/grade', GradeHorarioController::class);
 
         Route::get('/reservas', [ReservaAdminController::class, 'index'])->name('reservas.index');
+        Route::get('/reservas/criar', [ReservaAdminController::class, 'create'])->name('reservas.create');
         Route::patch('/reservas/{reserva}/aprovar', [ReservaAdminController::class, 'aprovar'])->name('reservas.aprovar');
         Route::patch('/reservas/{reserva}/negar', [ReservaAdminController::class, 'negar'])->name('reservas.negar');
         Route::delete('/reservas/{reserva}', [ReservaAdminController::class, 'destroy'])->name('reservas.destroy');
-        Route::get('/reservas/criar', [ReservaAdminController::class, 'create'])->name('reservas.create');
         Route::post('/reservas', [ReservaAdminController::class, 'store'])->name('reservas.store');
 
         Route::get('/biblioteca', [BibliotecaController::class, 'index'])->name('biblioteca.index');
@@ -124,25 +124,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
-
-
-Route::get('/biblioteca', [BibliotecaController::class, 'index'])
-->name('biblioteca.index');
-
-Route::get('/biblioteca/livros/criar', [BibliotecaController::class, 'createLivro'])
-->name('admin.biblioteca.create');
-
-Route::post('/biblioteca/livros', [BibliotecaController::class, 'storeLivro'])
-->name('biblioteca.livros.store');
-
-Route::get('/biblioteca/livros/{livro}/editar', [BibliotecaController::class, 'editLivro'])
-->name('admin.biblioteca.edit');
-
-Route::patch('/biblioteca/livros/{livro}', [BibliotecaController::class, 'updateLivro'])
-->name('biblioteca.livros.update');
-
-Route::delete('/biblioteca/livros/{livro}', [BibliotecaController::class, 'destroyLivro'])
-->name('admin.biblioteca.destroy');
-
-Route::get('/biblioteca/emprestimos', [BibliotecaController::class, 'emprestimos'])
-->name('biblioteca.emprestimos');

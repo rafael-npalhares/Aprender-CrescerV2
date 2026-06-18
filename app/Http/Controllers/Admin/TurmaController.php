@@ -57,6 +57,18 @@ class TurmaController extends Controller
 
     public function destroy(Turma $turma)
     {
+        // Verifica se existem alunos vinculados
+        if ($turma->alunos()->exists()) {
+            return redirect()->route('admin.turmas.index')
+                             ->with('erro', 'Não é possível remover uma turma com alunos vinculados.');
+        }
+
+        // Verifica se existem horários vinculados
+        if ($turma->gradeHorarios()->exists()) {
+            return redirect()->route('admin.turmas.index')
+                             ->with('erro', 'Não é possível remover uma turma com horários vinculados.');
+        }
+
         $turma->delete();
 
         return redirect()->route('admin.turmas.index')

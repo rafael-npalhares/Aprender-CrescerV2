@@ -19,8 +19,9 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
-        'remember_token', // ← adicionar isso
+        'remember_token',
     ];
+
     protected function casts(): array
     {
         return [
@@ -28,7 +29,6 @@ class User extends Authenticatable
         ];
     }
 
-    // Verifica o perfil do usuário
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
@@ -44,7 +44,6 @@ class User extends Authenticatable
         return $this->role === 'aluno';
     }
 
-    // Relacionamentos
     public function aluno()
     {
         return $this->hasOne(Aluno::class);
