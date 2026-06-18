@@ -16,8 +16,8 @@
 
     @forelse($avisos as $aviso)
 
-    <div style="background:#fff; border:1px solid var(--border-color); border-radius:12px; padding:20px 24px;
-                border-left: 4px solid {{ $aviso->fixado ? 'var(--blue-primary)' : ($aviso->ativo ? '#22c55e' : '#d1d5db') }};">
+    <div style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; padding:20px 24px;
+                border-left: 4px solid {{ $aviso->fixado ? 'var(--blue-primary)' : ($aviso->ativo ? 'var(--badge-green)' : 'var(--border-color)') }};">
 
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
 
@@ -26,15 +26,15 @@
 
                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
                     @if($aviso->fixado)
-                        <span style="font-size:.75rem; font-weight:700; color:var(--blue-primary); background:#e8f0fe; padding:2px 8px; border-radius:20px;">📌 Fixado</span>
+                        <span style="font-size:.75rem; font-weight:700; color:var(--badge-blue); background:var(--badge-blue-bg); padding:2px 8px; border-radius:20px;">📌 Fixado</span>
                     @endif
 
                     @if(!$aviso->ativo)
-                        <span style="font-size:.75rem; font-weight:700; color:#6b7280; background:#f3f4f6; padding:2px 8px; border-radius:20px;">Inativo</span>
+                        <span style="font-size:.75rem; font-weight:700; color:var(--text-secondary); background:#8b949e22; padding:2px 8px; border-radius:20px;">Inativo</span>
                     @endif
 
                     <span style="font-size:.75rem; font-weight:600; padding:2px 10px; border-radius:20px;
-                        {{ $aviso->visivel_para === 'todos' ? 'background:#dcfce7;color:#166534;' : ($aviso->visivel_para === 'professores' ? 'background:#fef9c3;color:#854d0e;' : 'background:#e0f2fe;color:#0369a1;') }}">
+                        {{ $aviso->visivel_para === 'todos' ? 'background:var(--badge-green-bg);color:var(--badge-green);' : ($aviso->visivel_para === 'professores' ? 'background:var(--badge-yellow-bg);color:var(--badge-yellow);' : 'background:var(--badge-blue-bg);color:var(--badge-blue);') }}">
                         {{ $aviso->visivel_para === 'todos' ? '🌐 Todos' : ($aviso->visivel_para === 'professores' ? '🧑‍🏫 Professores' : '🎒 Alunos') }}
                     </span>
                 </div>
@@ -48,7 +48,7 @@
                     {{ $aviso->conteudo }}
                 </p>
 
-                <div style="display:flex; gap:16px; margin-top:10px; font-size:.78rem; color:#9ca3af;">
+                <div style="display:flex; gap:16px; margin-top:10px; font-size:.78rem; color:var(--text-secondary);">
                     <span>👤 {{ $aviso->autor->name ?? '—' }}</span>
                     <span>📅 {{ $aviso->created_at->format('d/m/Y') }}</span>
                     @if($aviso->data_expiracao)
@@ -74,7 +74,7 @@
 
     @empty
 
-    <div style="background:#fff; border:1px solid var(--border-color); border-radius:12px; padding:48px; text-align:center;">
+    <div style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; padding:48px; text-align:center;">
         <div style="font-size:2.5rem; margin-bottom:12px;">🔔</div>
         <p style="color:var(--text-secondary); font-size:.95rem;">Nenhum aviso cadastrado ainda.</p>
         <a href="{{ route('admin.avisos.create') }}" class="btn btn-primary" style="margin-top:12px;">Criar primeiro aviso</a>

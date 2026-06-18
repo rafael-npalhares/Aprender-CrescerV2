@@ -38,7 +38,7 @@
 @if(request('turma_id') && $turmaSelecionada)
 
 {{-- Info da turma --}}
-<div style="background:#e8f0fe; border:1px solid #c7d9f7; border-radius:10px; padding:14px 20px; margin-bottom:20px; display:flex; align-items:center; gap:12px;">
+<div style="background:var(--badge-blue-bg); border:1px solid var(--border-color); border-radius:10px; padding:14px 20px; margin-bottom:20px; display:flex; align-items:center; gap:12px;">
     <span style="font-size:1.4rem;">🏫</span>
     <div>
         <strong style="color:var(--text-main);">{{ $turmaSelecionada->serie }}º ano {{ $turmaSelecionada->turma }}</strong>
@@ -62,7 +62,7 @@
 @endphp
 
 <div style="overflow-x:auto;">
-<table style="width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06);">
+<table style="width:100%; border-collapse:collapse; background:var(--card-bg); border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.3);">
     <thead>
         <tr>
             <th style="background:var(--sidebar-bg); color:#fff; padding:14px 18px; text-align:left; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; width:80px;">
@@ -77,7 +77,7 @@
     </thead>
     <tbody>
         @foreach($aulas as $aula)
-        <tr style="{{ $loop->even ? 'background:#f8fafc;' : 'background:#fff;' }}">
+        <tr style="{{ $loop->even ? 'background:var(--hover-bg);' : 'background:var(--card-bg);' }}">
 
             {{-- Número da aula --}}
             <td style="padding:14px 18px; font-weight:700; font-size:.85rem; color:var(--text-secondary); border-right:2px solid var(--border-color); text-align:center;">
@@ -89,7 +89,7 @@
             @php $horario = $grade[$diaKey][$aula] ?? null; @endphp
             <td style="padding:10px 14px; border:1px solid var(--border-color); vertical-align:top; min-width:150px;">
                 @if($horario)
-                    <div style="background:#e8f0fe; border-radius:8px; padding:10px 12px;">
+                    <div style="background:var(--badge-blue-bg); border-radius:8px; padding:10px 12px;">
                         <div style="font-weight:700; font-size:.85rem; color:var(--text-main); margin-bottom:3px;">
                             {{ $horario->disciplina }}
                         </div>
@@ -98,7 +98,7 @@
                         </div>
                         <div style="display:flex; gap:6px; margin-top:8px;">
                             <a href="{{ route('admin.grade.edit', $horario) }}"
-                               style="font-size:.72rem; padding:2px 8px; border-radius:4px; background:#fff; border:1px solid #c7d9f7; color:var(--blue-primary); text-decoration:none;">
+                               style="font-size:.72rem; padding:2px 8px; border-radius:4px; background:var(--card-bg); border:1px solid var(--blue-primary); color:var(--badge-blue); text-decoration:none;">
                                 ✏️ Editar
                             </a>
                             <form action="{{ route('admin.grade.destroy', $horario) }}" method="POST"
@@ -106,7 +106,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                        style="font-size:.72rem; padding:2px 8px; border-radius:4px; background:#fff; border:1px solid #fca5a5; color:#dc2626; cursor:pointer;">
+                                        style="font-size:.72rem; padding:2px 8px; border-radius:4px; background:var(--card-bg); border:1px solid var(--badge-red); color:var(--badge-red); cursor:pointer;">
                                     🗑️
                                 </button>
                             </form>
@@ -115,7 +115,7 @@
                 @else
                     <div style="text-align:center; padding:8px 0;">
                         <a href="{{ route('admin.grade.create') }}?turma_id={{ request('turma_id') }}&dia_semana={{ $diaKey }}&aula={{ $aula }}"
-                           style="font-size:.78rem; color:#d1d5db; text-decoration:none; display:block;"
+                           style="font-size:.78rem; color:var(--text-secondary); text-decoration:none; display:block;"
                            title="Adicionar aula">
                             + livre
                         </a>
@@ -133,7 +133,7 @@
 @elseif(!request('turma_id'))
 
 {{-- Estado inicial: nenhuma turma selecionada --}}
-<div style="background:#fff; border:1px solid var(--border-color); border-radius:12px; padding:56px; text-align:center;">
+<div style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; padding:56px; text-align:center;">
     <div style="font-size:3rem; margin-bottom:16px;">📋</div>
     <p style="color:var(--text-secondary); font-size:.95rem;">Selecione uma turma acima para visualizar a grade de horários.</p>
 </div>

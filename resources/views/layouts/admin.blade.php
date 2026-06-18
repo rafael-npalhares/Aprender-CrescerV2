@@ -121,8 +121,19 @@
 
         /* ── TABELA ── */
         .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--text-main);
+            --bs-table-striped-bg: var(--hover-bg);
+            --bs-table-striped-color: var(--text-main);
+            --bs-table-hover-bg: var(--hover-bg);
+            --bs-table-hover-color: var(--text-main);
             color: var(--text-main);
             border-color: var(--border-color);
+            background-color: var(--card-bg);
+        }
+        .table tbody tr td,
+        .table tbody tr th {
+            background-color: var(--card-bg);
         }
         .table thead th {
             font-size: .75rem;
