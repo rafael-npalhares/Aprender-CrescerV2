@@ -3,167 +3,275 @@
 namespace App\Http\Controllers\Cantina;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProdutoCantina;
+use App\Models\PedidoCantina;
+use App\Models\ItensPedidoCantina;
+use App\Models\CategoriaCantina;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class CantinaController extends Controller
 {
-    /**
-     * Cardápio base — substitua por CardapioItem::all() quando tiver a migration.
-     */
-    private function cardapioBase(): array
+    private const ESTOQUE_LIMITE_BAIXO = 5;
+
+    // ─── Admin ───────────────────────────────────────────────────────────────
+
+    // Painel admin: vê todos os produtos (ativos e inativos) para gerenciar
+    public function adminIndex()
     {
-        return [
-            'seg' => [
-                ['id'=>1,'nome'=>'X-Burguer Artesanal','descricao'=>'Hambúrguer 160g, queijo cheddar, alface e tomate no pão brioche.','preco'=>14.90,'foto'=>'cantina/hamburguer.jpg','estoque'=>'full'],
-                ['id'=>2,'nome'=>'Suco Natural','descricao'=>'Laranja, limão ou maracujá — 300 ml.','preco'=>5.00,'foto'=>'cantina/suco.jpg','estoque'=>'half'],
-            ],
-            'ter' => [
-                ['id'=>3,'nome'=>'Prato Feito','descricao'=>'Arroz, feijão, frango grelhado e salada.','preco'=>16.50,'foto'=>'cantina/prato_feito.jpg','estoque'=>'full'],
-            ],
-            'qua' => [
-                ['id'=>4,'nome'=>'Marmita Fit','descricao'=>'Frango, batata-doce e brócolis no vapor.','preco'=>18.00,'foto'=>'cantina/marmita.jpg','estoque'=>'half'],
-            ],
-            'qui' => [
-                ['id'=>5,'nome'=>'Pizza Fatia','descricao'=>'Fatia de pizza grande — sabores: margherita ou frango.','preco'=>9.90,'foto'=>'cantina/pizza.jpg','estoque'=>'empty'],
-            ],
-            'sex' => [
-                ['id'=>6,'nome'=>'Pastel','descricao'=>'Pastel de forno: queijo, frango ou carne.','preco'=>7.50,'foto'=>'cantina/pastel.jpg','estoque'=>'full'],
-                ['id'=>7,'nome'=>'Café + Bolo','descricao'=>'Café coado e fatia de bolo de cenoura com chocolate.','preco'=>6.00,'foto'=>'cantina/cafe_bolo.jpg','estoque'=>'full'],
-            ],
-        ];
+        $produtos = ProdutoCantina::with('categoria')
+            ->orderBy('categoria_id')
+            ->orderBy('nome')
+            ->get()
+            ->groupBy('categoria.nome');
+
+        // withCount para mostrar quantos produtos cada categoria tem (usado ao bloquear exclusão)
+        $categorias = CategoriaCantina::withCount('produtos')->orderBy('nome')->get();
+
+        return view('admin.cantina.index', compact('produtos', 'categorias'));
     }
 
-    // ──────────────────────────────────────────
-    //  GET /admin/cantina  |  /professor/cantina  |  /aluno/cantina
-    // ──────────────────────────────────────────
-    public function index()
+    // ─── Admin — Categorias ──────────────────────────────────────────────────
+
+    public function storeCategoria(Request $request)
     {
-        $cardapio = $this->cardapioBase();
-        return view('cantina.index', compact('cardapio'));
+        $request->validate([
+            'nome' => 'required|string|max:100|unique:categorias_cantina,nome',
+        ]);
+
+        CategoriaCantina::create($request->only('nome'));
+
+        return back()->with('sucesso', 'Categoria criada com sucesso!');
     }
 
-    // ──────────────────────────────────────────
-    //  GET /admin/cantina/produtos/criar
-    // ──────────────────────────────────────────
+    public function updateCategoria(Request $request, CategoriaCantina $categoria)
+    {
+        $request->validate([
+            'nome' => 'required|string|max:100|unique:categorias_cantina,nome,' . $categoria->id,
+        ]);
+
+        $categoria->update($request->only('nome'));
+
+        return back()->with('sucesso', 'Categoria atualizada!');
+    }
+
+    // Bloqueia exclusão se ainda houver produtos vinculados (FK é onDelete('restrict'))
+    public function destroyCategoria(CategoriaCantina $categoria)
+    {
+        if ($categoria->produtos()->exists()) {
+            return back()->with('erro', 'Não é possível excluir: existem produtos cadastrados nessa categoria.');
+        }
+
+        $categoria->delete();
+
+        return back()->with('sucesso', 'Categoria removida.');
+    }
+
+    // Formulário de criação de produto (página separada — não modal)
     public function createProduto()
     {
-        return view('cantina.produto-form');
+        $categorias = CategoriaCantina::orderBy('nome')->get();
+        return view('cantina.produto-form', compact('categorias'));
     }
 
-    // ──────────────────────────────────────────
-    //  POST /admin/cantina/produtos
-    // ──────────────────────────────────────────
     public function storeProduto(Request $request)
     {
         $request->validate([
-            'nome'      => 'required|string|max:120',
-            'descricao' => 'nullable|string|max:300',
-            'preco'     => 'required|numeric|min:0',
-            'estoque'   => 'required|in:full,half,empty',
-            'foto'      => 'nullable|image|max:2048',
+            'categoria_id'       => 'required|exists:categorias_cantina,id',
+            'nome'               => 'required|string|max:200',
+            'descricao'          => 'nullable|string|max:300',
+            'preco'              => 'required|numeric|min:0',
+            'quantidade_estoque' => 'required|integer|min:0',
+            'foto'               => 'nullable|image|max:2048',
         ]);
 
-        // TODO: CardapioItem::create([...]) quando tiver o model
+        $data = $request->only('categoria_id', 'nome', 'descricao', 'preco', 'quantidade_estoque');
+        $data['ativo'] = 1;
+
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('cantina', 'public');
+        }
+
+        ProdutoCantina::create($data);
 
         return redirect()->route('admin.cantina.index')
-                         ->with('success', 'Produto criado com sucesso!');
+                         ->with('sucesso', 'Produto cadastrado com sucesso!');
     }
 
-    // ──────────────────────────────────────────
-    //  GET /admin/cantina/produtos/{produto}/editar
-    // ──────────────────────────────────────────
-    public function editProduto(int $produto)
+    // Formulário de edição de produto (página separada — não modal)
+    public function editProduto(ProdutoCantina $produto)
     {
-        // TODO: $item = CardapioItem::findOrFail($produto);
-        return view('cantina.produto-form' /*, compact('item') */);
+        $categorias = CategoriaCantina::orderBy('nome')->get();
+        return view('cantina.produto-form', compact('produto', 'categorias'));
     }
 
-    // ──────────────────────────────────────────
-    //  PATCH /admin/cantina/produtos/{produto}
-    //  — chamado pelo modal de edição do blade
-    // ──────────────────────────────────────────
-    public function updateProduto(Request $request, int $produto)
+    public function updateProduto(Request $request, ProdutoCantina $produto)
     {
         $request->validate([
-            'nome'      => 'required|string|max:120',
-            'descricao' => 'nullable|string|max:300',
-            'preco'     => 'required|numeric|min:0',
-            'estoque'   => 'required|in:full,half,empty',
-            'foto'      => 'nullable|image|max:2048',
+            'categoria_id'       => 'required|exists:categorias_cantina,id',
+            'nome'               => 'required|string|max:200',
+            'descricao'          => 'nullable|string|max:300',
+            'preco'              => 'required|numeric|min:0',
+            'quantidade_estoque' => 'required|integer|min:0',
+            'foto'               => 'nullable|image|max:2048',
         ]);
 
-        // TODO:
-        // $item = CardapioItem::findOrFail($produto);
-        // $item->update($request->only('nome','descricao','preco','estoque'));
-        // if ($request->hasFile('foto')) {
-        //     Storage::delete('public/' . $item->foto);
-        //     $item->foto = $request->file('foto')->store('cantina', 'public');
-        //     $item->save();
-        // }
+        $data = $request->only('categoria_id', 'nome', 'descricao', 'preco', 'quantidade_estoque');
+
+        if ($request->hasFile('foto')) {
+            if ($produto->foto) Storage::disk('public')->delete($produto->foto);
+            $data['foto'] = $request->file('foto')->store('cantina', 'public');
+        }
+
+        $produto->update($data);
 
         return redirect()->route('admin.cantina.index')
-                         ->with('success', 'Item atualizado com sucesso!');
+                         ->with('sucesso', 'Produto atualizado!');
     }
 
-    // ──────────────────────────────────────────
-    //  DELETE /admin/cantina/produtos/{produto}
-    // ──────────────────────────────────────────
-    public function destroyProduto(int $produto)
+    // Soft delete: marca ativo = 0 em vez de deletar do banco
+    public function destroyProduto(ProdutoCantina $produto)
     {
-        // TODO: CardapioItem::findOrFail($produto)->delete();
+        if ($produto->foto) Storage::disk('public')->delete($produto->foto);
+        $produto->update(['ativo' => 0]);
 
         return redirect()->route('admin.cantina.index')
-                         ->with('success', 'Produto removido.');
+                         ->with('sucesso', 'Produto removido.');
     }
 
-    // ──────────────────────────────────────────
-    //  GET /admin/cantina/pedidos
-    // ──────────────────────────────────────────
+    // Lista todos os pedidos (admin)
     public function pedidos()
     {
-        // TODO: $pedidos = Pedido::with('user')->latest()->get();
-        return view('cantina.pedidos' /*, compact('pedidos') */);
+        $pedidos = PedidoCantina::with(['usuario', 'itens.produto'])
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('cantina.pedidos', compact('pedidos'));
     }
 
-    // ──────────────────────────────────────────
-    //  POST /professor/cantina/pedidos  |  /aluno/cantina/pedidos
-    // ──────────────────────────────────────────
+    // Admin deleta pedido permanentemente
+    public function destroy(PedidoCantina $pedido)
+    {
+        // Devolve estoque dos itens antes de deletar
+        foreach ($pedido->itens as $item) {
+            $item->produto->increment('quantidade_estoque', $item->quantidade);
+        }
+
+        $pedido->delete();
+
+        return redirect()->back()->with('sucesso', 'Pedido removido.');
+    }
+
+    // ─── Aluno / Professor ───────────────────────────────────────────────────
+
+    // Cardápio: só produtos ativos
+    public function index()
+    {
+        $produtos = ProdutoCantina::with('categoria')
+            ->where('ativo', 1)
+            ->orderBy('categoria_id')
+            ->orderBy('nome')
+            ->get()
+            ->groupBy('categoria.nome');
+
+        $categorias = CategoriaCantina::orderBy('nome')->get();
+        $isAdmin    = false;
+
+        return view('cantina.index', compact('produtos', 'isAdmin', 'categorias'));
+    }
+
     public function fazerPedido(Request $request)
     {
         $request->validate([
-            'produto_id' => 'required|integer',
-            'quantidade' => 'required|integer|min:1',
+            'itens'              => 'required|array|min:1',
+            'itens.*.produto_id' => 'required|exists:produtos_cantina,id',
+            'itens.*.quantidade' => 'required|integer|min:1',
+            'data_retirada'      => 'required|date|after_or_equal:today',
         ]);
 
-        // TODO: Pedido::create([...]);
+        // Verifica estoque de todos antes de gravar qualquer coisa
+        foreach ($request->itens as $item) {
+            $produto = ProdutoCantina::findOrFail($item['produto_id']);
+            if ($produto->quantidade_estoque < $item['quantidade']) {
+                return back()->with('erro', "Estoque insuficiente para \"{$produto->nome}\".");
+            }
+        }
 
-        return redirect()->back()->with('success', 'Pedido realizado!');
+        $pedido = DB::transaction(function () use ($request) {
+            $pedido = PedidoCantina::create([
+                'user_id'        => Auth::id(),
+                'numero_pedido'  => PedidoCantina::proximoNumero(),
+                'senha_retirada' => PedidoCantina::gerarSenha(),
+                'data_retirada'  => $request->data_retirada,
+                'status'         => 'pendente',
+            ]);
+
+            foreach ($request->itens as $item) {
+                $produto = ProdutoCantina::findOrFail($item['produto_id']);
+
+                ItensPedidoCantina::create([
+                    'pedido_id'      => $pedido->id,
+                    'produto_id'     => $produto->id,
+                    'quantidade'     => $item['quantidade'],
+                    'preco_unitario' => $produto->preco,
+                ]);
+
+                $produto->decrement('quantidade_estoque', $item['quantidade']);
+            }
+
+            return $pedido;
+        });
+
+        // Redireciona para meus pedidos; a view exibe modal com número + senha via session
+        return redirect()->route('cantina.meus-pedidos')
+                         ->with('pedidoConfirmado', $pedido->load('itens.produto'));
     }
 
-    // ──────────────────────────────────────────
-    //  GET /professor/cantina/meus-pedidos  |  /aluno/cantina/meus-pedidos
-    // ──────────────────────────────────────────
     public function meusPedidos()
     {
-        // TODO: $pedidos = Pedido::where('user_id', auth()->id())->latest()->get();
-        return view('cantina.meus-pedidos' /*, compact('pedidos') */);
+        $pedidos = PedidoCantina::with('itens.produto')
+            ->where('user_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Recupera pedido recém-confirmado da session para exibir modal
+        $pedidoConfirmado = session('pedidoConfirmado');
+
+        return view('cantina.meus-pedidos', compact('pedidos', 'pedidoConfirmado'));
     }
 
-    // ──────────────────────────────────────────
-    //  PATCH /cantina/pedidos/{pedido}/entregar  (admin)
-    // ──────────────────────────────────────────
-    public function entregar(int $pedido)
+    // Usuário cancela o próprio pedido; admin cancela qualquer um
+    public function cancelar(PedidoCantina $pedido)
     {
-        // TODO: Pedido::findOrFail($pedido)->update(['status'=>'entregue']);
-        return redirect()->back()->with('success', 'Pedido marcado como entregue.');
+        if (!Auth::user()->isAdmin() && $pedido->user_id !== Auth::id()) {
+            abort(403, 'Ação não autorizada.');
+        }
+
+        // Devolve estoque
+        foreach ($pedido->itens as $item) {
+            $item->produto->increment('quantidade_estoque', $item->quantidade);
+        }
+
+        $pedido->update(['status' => 'cancelado']);
+
+        return back()->with('sucesso', 'Pedido cancelado.');
     }
 
-    // ──────────────────────────────────────────
-    //  PATCH /cantina/pedidos/{pedido}/cancelar  (admin | professor | aluno)
-    // ──────────────────────────────────────────
-    public function cancelar(int $pedido)
+    // Gerente marca como entregue (também usado pelo admin)
+    public function entregar(PedidoCantina $pedido)
     {
-        // TODO: Pedido::findOrFail($pedido)->update(['status'=>'cancelado']);
-        return redirect()->back()->with('success', 'Pedido cancelado.');
+        $pedido->update(['status' => 'entregue']);
+        return back()->with('sucesso', 'Pedido marcado como entregue!');
+    }
+
+    // ─── Helper estático ─────────────────────────────────────────────────────
+
+    public static function nivelEstoque(int $quantidade): string
+    {
+        if ($quantidade <= 0) return 'empty';
+        if ($quantidade <= self::ESTOQUE_LIMITE_BAIXO) return 'half';
+        return 'full';
     }
 }

@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckRole
 {
     /**
-     * Handle an incoming request.
+     * Verifica se o usuário autenticado possui um dos perfis exigidos pela rota.
      *
-     * @param Closure(Request): (Response) $next
+     * Uso nas rotas: middleware('role:admin') ou middleware('role:admin,professor')
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {

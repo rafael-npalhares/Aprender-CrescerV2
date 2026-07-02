@@ -10,24 +10,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
+        /* ── VARIÁVEIS DO TEMA ESCURO ── */
         :root {
-            --sidebar-bg:    #161b22;
-            --blue-primary:  #1f6feb;
-            --page-bg:       #0d1117;
-            --card-bg:       #161b22;
-            --border-color:  #21262d;
-            --text-main:     #e6edf3;
-            --text-secondary:#8b949e;
-            --input-bg:      #0d1117;
-            --hover-bg:      #1c2128;
-            --badge-green-bg:#3fb95022;
-            --badge-green:   #3fb950;
-            --badge-blue-bg: #58a6ff22;
-            --badge-blue:    #58a6ff;
-            --badge-red-bg:  #f8514922;
-            --badge-red:     #f85149;
+            --sidebar-bg:     #161b22;
+            --blue-primary:   #1f6feb;
+            --page-bg:        #0d1117;
+            --card-bg:        #161b22;
+            --border-color:   #21262d;
+            --text-main:      #e6edf3;
+            --text-secondary: #8b949e;
+            --input-bg:       #0d1117;
+            --hover-bg:       #1c2128;
+            --badge-green-bg: #3fb95022;
+            --badge-green:    #3fb950;
+            --badge-blue-bg:  #58a6ff22;
+            --badge-blue:     #58a6ff;
+            --badge-red-bg:   #f8514922;
+            --badge-red:      #f85149;
             --badge-yellow-bg:#e3b34122;
-            --badge-yellow:  #e3b341;
+            --badge-yellow:   #e3b341;
         }
 
         *, *::before, *::after { box-sizing: border-box; }
@@ -36,6 +37,45 @@
             background: var(--page-bg);
             color: var(--text-main);
             font-family: 'DM Sans', system-ui, sans-serif;
+        }
+
+        /* ────────────────────────────────────────
+           SOBRESCRITA DAS VARIÁVEIS NATIVAS DO
+           BOOTSTRAP — evita "vazamento" de branco
+           em tabelas, modais, dropdowns e badges
+        ──────────────────────────────────────── */
+        .table {
+            --bs-table-bg:           transparent;
+            --bs-table-striped-bg:   var(--hover-bg);
+            --bs-table-hover-bg:     var(--hover-bg);
+            --bs-table-active-bg:    var(--hover-bg);
+            --bs-table-color:        var(--text-main);
+            --bs-table-striped-color:var(--text-main);
+            --bs-table-hover-color:  var(--text-main);
+            --bs-table-border-color: var(--border-color);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .modal-content {
+            --bs-modal-bg:           var(--card-bg);
+            --bs-modal-border-color: var(--border-color);
+            --bs-modal-color:        var(--text-main);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        .modal-header, .modal-footer {
+            border-color: var(--border-color);
+        }
+
+        .dropdown-menu {
+            --bs-dropdown-bg:              var(--card-bg);
+            --bs-dropdown-border-color:    var(--border-color);
+            --bs-dropdown-color:           var(--text-main);
+            --bs-dropdown-link-color:      var(--text-main);
+            --bs-dropdown-link-hover-bg:   var(--hover-bg);
+            --bs-dropdown-link-hover-color:var(--text-main);
         }
 
         /* ── SIDEBAR ── */
@@ -82,7 +122,11 @@
             padding: .65rem 1.25rem .3rem;
             margin-top: .5rem;
         }
-        #sidebar .sidebar-footer { margin-top: auto; padding: 1rem; border-top: 1px solid var(--border-color); }
+        #sidebar .sidebar-footer {
+            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
 
         /* ── TOPBAR ── */
         #topbar {
@@ -120,21 +164,6 @@
         }
 
         /* ── TABELA ── */
-        .table {
-            --bs-table-bg: transparent;
-            --bs-table-color: var(--text-main);
-            --bs-table-striped-bg: var(--hover-bg);
-            --bs-table-striped-color: var(--text-main);
-            --bs-table-hover-bg: var(--hover-bg);
-            --bs-table-hover-color: var(--text-main);
-            color: var(--text-main);
-            border-color: var(--border-color);
-            background-color: var(--card-bg);
-        }
-        .table tbody tr td,
-        .table tbody tr th {
-            background-color: var(--card-bg);
-        }
         .table thead th {
             font-size: .75rem;
             text-transform: uppercase;
@@ -194,29 +223,27 @@
         .btn-primary {
             background: var(--blue-primary);
             border-color: var(--blue-primary);
-            color: #fff;
-            font-weight: 600;
-            border-radius: 8px;
+            color: #fff; font-weight: 600; border-radius: 8px;
         }
-        .btn-primary:hover { background: #388bfd; border-color: #388bfd; }
+        .btn-primary:hover { background: #388bfd; border-color: #388bfd; color: #fff; }
 
         .btn-secondary {
             background: var(--hover-bg);
             border-color: var(--border-color);
-            color: var(--text-main);
-            font-weight: 600;
-            border-radius: 8px;
+            color: var(--text-main); font-weight: 600; border-radius: 8px;
         }
-        .btn-secondary:hover { background: #2d333b; color: var(--text-main); }
+        .btn-secondary:hover { background: #2d333b; color: var(--text-main); border-color: var(--border-color); }
 
         .btn-success  { background: #238636; border-color: #238636; color: #fff; border-radius: 8px; }
-        .btn-success:hover { background: #2ea043; }
+        .btn-success:hover { background: #2ea043; color: #fff; }
 
         .btn-danger   { background: #b91c1c; border-color: #b91c1c; color: #fff; border-radius: 8px; }
-        .btn-danger:hover { background: #dc2626; }
+        .btn-danger:hover { background: #dc2626; color: #fff; }
 
         .btn-warning  { background: #9a6700; border-color: #9a6700; color: #fff; border-radius: 8px; }
-        .btn-warning:hover { background: #b07800; }
+        .btn-warning:hover { background: #b07800; color: #fff; }
+
+        .btn-close { filter: invert(1); }
 
         /* ── BADGES ── */
         .badge-custom {
@@ -225,10 +252,22 @@
             padding: .25rem .65rem; border-radius: 20px;
             text-transform: uppercase; letter-spacing: .04em;
         }
-        .badge-success { background: var(--badge-green-bg); color: var(--badge-green); }
-        .badge-danger  { background: var(--badge-red-bg);   color: var(--badge-red);   }
-        .badge-warning { background: var(--badge-yellow-bg);color: var(--badge-yellow);}
-        .badge-secondary { background: #8b949e22; color: var(--text-secondary); }
+        .badge-success  { background: var(--badge-green-bg);  color: var(--badge-green);  }
+        .badge-danger   { background: var(--badge-red-bg);    color: var(--badge-red);    }
+        .badge-warning  { background: var(--badge-yellow-bg); color: var(--badge-yellow); }
+        .badge-secondary{ background: #8b949e22; color: var(--text-secondary); }
+        .badge-info     { background: var(--badge-blue-bg);   color: var(--badge-blue);   }
+
+        /* ── ROLE CARDS — tema escuro correto ── */
+        .role-card { transition: all .2s; }
+        .role-card:hover {
+            border-color: var(--blue-primary) !important;
+            background: #1f6feb18 !important;
+        }
+        .role-card.selected {
+            border-color: var(--blue-primary) !important;
+            background: #1f6feb28 !important;
+        }
 
         /* ── CABEÇALHO DE PÁGINA ── */
         .page-header {
@@ -261,7 +300,6 @@
             border: 1px solid rgba(185,28,28,.3);
             color: #f85149; border-radius: 10px;
         }
-        .btn-close { filter: invert(1); }
 
         /* ── PAGINAÇÃO ── */
         .page-link {
@@ -277,17 +315,6 @@
         }
         .page-link:hover { background: var(--hover-bg); color: var(--text-main); }
         .page-item.disabled .page-link { opacity: .4; }
-
-        /* ── ROLE CARDS (usuários) ── */
-        .role-card { transition: all .2s; }
-        .role-card:hover {
-            border-color: var(--blue-primary) !important;
-            background: #1f6feb11 !important;
-        }
-        .role-card.selected {
-            border-color: var(--blue-primary) !important;
-            background: #1f6feb22 !important;
-        }
     </style>
 
     @stack('styles')
@@ -303,49 +330,120 @@
 
     <ul class="nav flex-column mt-2">
 
-        <li><a href="{{ route('admin.dashboard') }}"
-               class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-speedometer2"></i> Dashboard
-        </a></li>
+        @if(auth()->user()->isAdmin())
 
-        <li class="sidebar-section">Gestão</li>
+            <li><a href="{{ route('admin.dashboard') }}"
+                   class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a></li>
 
-        <li><a href="{{ route('admin.usuarios.index') }}"
-               class="nav-link {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
-            <i class="bi bi-people-fill"></i> Usuários
-        </a></li>
+            <li class="sidebar-section">Gestão</li>
 
-        <li><a href="{{ route('admin.turmas.index') }}"
-               class="nav-link {{ request()->routeIs('admin.turmas.*') ? 'active' : '' }}">
-            <i class="bi bi-collection-fill"></i> Turmas
-        </a></li>
+            <li><a href="{{ route('admin.usuarios.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
+                <i class="bi bi-people-fill"></i> Usuários
+            </a></li>
 
-        <li><a href="{{ route('admin.avisos.index') }}"
-               class="nav-link {{ request()->routeIs('admin.avisos.*') ? 'active' : '' }}">
-            <i class="bi bi-megaphone-fill"></i> Avisos
-        </a></li>
+            <li><a href="{{ route('admin.turmas.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.turmas.*') ? 'active' : '' }}">
+                <i class="bi bi-collection-fill"></i> Turmas
+            </a></li>
 
-        <li><a href="{{ route('admin.reservas.index') }}"
-               class="nav-link {{ request()->routeIs('admin.reservas.*') ? 'active' : '' }}">
-            <i class="bi bi-calendar-check-fill"></i> Reservas
-        </a></li>
+            <li><a href="{{ route('admin.avisos.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.avisos.*') ? 'active' : '' }}">
+                <i class="bi bi-megaphone-fill"></i> Avisos
+            </a></li>
 
-        <li><a href="{{ route('admin.grade.index') }}"
-               class="nav-link {{ request()->routeIs('admin.grade.*') ? 'active' : '' }}">
-            <i class="bi bi-grid-3x3-gap-fill"></i> Horários
-        </a></li>
+            <li><a href="{{ route('admin.reservas.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.reservas.*') ? 'active' : '' }}">
+                <i class="bi bi-calendar-check-fill"></i> Reservas
+            </a></li>
 
-        <li class="sidebar-section">Módulos</li>
+            <li><a href="{{ route('admin.grade.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.grade.*') ? 'active' : '' }}">
+                <i class="bi bi-grid-3x3-gap-fill"></i> Horários
+            </a></li>
 
-        <li><a href="{{ route('admin.biblioteca.index') }}"
-               class="nav-link {{ request()->routeIs('admin.biblioteca.*') ? 'active' : '' }}">
-            <i class="bi bi-book-fill"></i> Biblioteca
-        </a></li>
+            <li class="sidebar-section">Módulos</li>
 
-        <li><a href="{{ route('admin.cantina.index') }}"
-               class="nav-link {{ request()->routeIs('admin.cantina.*') ? 'active' : '' }}">
-            <i class="bi bi-bag-fill"></i> Cantina
-        </a></li>
+            <li><a href="{{ route('admin.biblioteca.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.biblioteca.*') ? 'active' : '' }}">
+                <i class="bi bi-book-fill"></i> Biblioteca
+            </a></li>
+
+            <li><a href="{{ route('admin.cantina.index') }}"
+                   class="nav-link {{ request()->routeIs('admin.cantina.*') ? 'active' : '' }}">
+                <i class="bi bi-bag-fill"></i> Cantina
+            </a></li>
+
+        @elseif(auth()->user()->isAluno())
+
+            <li><a href="{{ route('aluno.dashboard') }}"
+                   class="nav-link {{ request()->routeIs('aluno.dashboard') ? 'active' : '' }}">
+                <i class="bi bi-person-circle"></i> Perfil
+            </a></li>
+
+            <li class="sidebar-section">Acadêmico</li>
+
+            <li><a href="{{ route('aluno.avisos') }}"
+                   class="nav-link {{ request()->routeIs('aluno.avisos') ? 'active' : '' }}">
+                <i class="bi bi-megaphone-fill"></i> Avisos
+            </a></li>
+
+            <li><a href="{{ route('aluno.horarios') }}"
+                   class="nav-link {{ request()->routeIs('aluno.horarios') ? 'active' : '' }}">
+                <i class="bi bi-grid-3x3-gap-fill"></i> Horários
+            </a></li>
+
+            <li class="sidebar-section">Módulos</li>
+
+            <li><a href="{{ route('biblioteca.index') }}"
+                   class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
+                <i class="bi bi-book-fill"></i> Biblioteca
+            </a></li>
+
+            <li><a href="{{ route('cantina.index') }}"
+                   class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
+                <i class="bi bi-bag-fill"></i> Cantina
+            </a></li>
+
+        @elseif(auth()->user()->isProfessor())
+
+            <li><a href="{{ route('professor.dashboard') }}"
+                   class="nav-link {{ request()->routeIs('professor.dashboard') ? 'active' : '' }}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a></li>
+
+            <li class="sidebar-section">Acadêmico</li>
+
+            <li><a href="{{ route('professor.avisos') }}"
+                   class="nav-link {{ request()->routeIs('professor.avisos') ? 'active' : '' }}">
+                <i class="bi bi-megaphone-fill"></i> Avisos
+            </a></li>
+
+            <li><a href="{{ route('professor.horarios') }}"
+                   class="nav-link {{ request()->routeIs('professor.horarios') ? 'active' : '' }}">
+                <i class="bi bi-grid-3x3-gap-fill"></i> Horários
+            </a></li>
+
+            <li><a href="{{ route('professor.reservas.index') }}"
+                   class="nav-link {{ request()->routeIs('professor.reservas.*') ? 'active' : '' }}">
+                <i class="bi bi-calendar-check-fill"></i> Reservas
+            </a></li>
+
+            <li class="sidebar-section">Módulos</li>
+
+            <li><a href="{{ route('biblioteca.index') }}"
+                   class="nav-link {{ request()->routeIs('biblioteca.*') ? 'active' : '' }}">
+                <i class="bi bi-book-fill"></i> Biblioteca
+            </a></li>
+
+            <li><a href="{{ route('cantina.index') }}"
+                   class="nav-link {{ request()->routeIs('cantina.*') ? 'active' : '' }}">
+                <i class="bi bi-bag-fill"></i> Cantina
+            </a></li>
+
+        @endif
 
     </ul>
 

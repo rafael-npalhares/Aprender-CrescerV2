@@ -11,10 +11,17 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'SixSeven',
-            'email' => 'admin@aprendercrescer.com',
+            'name'     => 'Administrador',
+            'email'    => 'admin@aprendercrescer.com',
             'password' => Hash::make('12345678'),
-            'role' => 'admin',
+            'role'     => 'admin',
+        ]);
+
+        User::create([
+            'name'     => 'Gerente Cantina',
+            'email'    => 'gerente@aprendercrescer.com',
+            'password' => Hash::make('12345678'),
+            'role'     => 'gerente',
         ]);
     }
 }

@@ -29,6 +29,8 @@ class User extends Authenticatable
         ];
     }
 
+    // ─── Verificações de perfil ───────────────────────────────────────────────
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
@@ -43,6 +45,13 @@ class User extends Authenticatable
     {
         return $this->role === 'aluno';
     }
+
+    public function isGerente(): bool
+    {
+        return $this->role === 'gerente';
+    }
+
+    // ─── Relacionamentos ──────────────────────────────────────────────────────
 
     public function aluno()
     {
@@ -59,6 +68,7 @@ class User extends Authenticatable
         return $this->hasMany(Aviso::class);
     }
 
+    // Reservas feitas pelo professor (professor_id aponta para users.id)
     public function reservas()
     {
         return $this->hasMany(Reserva::class, 'professor_id');
@@ -69,8 +79,15 @@ class User extends Authenticatable
         return $this->hasMany(Emprestimo::class);
     }
 
-    public function pedidos()
+    // Pedidos da cantina feitos pelo usuário
+    public function pedidosCantina()
     {
         return $this->hasMany(PedidoCantina::class);
+    }
+
+    // Aulas na grade de horários (como professor)
+    public function gradeHorarios()
+    {
+        return $this->hasMany(GradeHorario::class, 'professor_id');
     }
 }

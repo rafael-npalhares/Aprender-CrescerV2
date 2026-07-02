@@ -52,9 +52,9 @@
 {{-- Tabela da grade --}}
 @php
     $dias = ['segunda' => 'Segunda', 'terca' => 'Terça', 'quarta' => 'Quarta', 'quinta' => 'Quinta', 'sexta' => 'Sexta'];
-    $aulas = [1, 2, 3, 4, 5];
+    $aulas = [1, 2, 3, 4, 5, 6];
 
-    // Organiza os horários em [dia][aula] para acesso rápido
+
     $grade = [];
     foreach ($horarios as $h) {
         $grade[$h->dia_semana][$h->aula] = $h;

@@ -11,6 +11,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('turma_id')->nullable()->constrained()->onDelete('set null');
+            // Gerada automaticamente no Model Aluno via boot()
+            // Formato: AP + ano_atual + sequencial com 4 dígitos → AP20260001
             $table->string('matricula', 20)->unique();
             $table->date('data_nascimento')->nullable();
             $table->timestamps();

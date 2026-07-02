@@ -15,9 +15,8 @@
     <div class="card">
         <div style="padding: 32px;">
 
-            {{-- Ícone + título interno --}}
             <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid var(--border-color);">
-                <div style="width:48px;height:48px;background:#e8f0fe;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">👤</div>
+                <div style="width:48px;height:48px;background:var(--badge-blue-bg);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">👤</div>
                 <div>
                     <div style="font-weight:700;font-size:1rem;color:var(--text-main);">Dados do usuário</div>
                     <div style="font-size:.85rem;color:var(--text-secondary);">Todos os campos marcados com * são obrigatórios</div>
@@ -27,26 +26,22 @@
             <form action="{{ route('admin.usuarios.store') }}" method="POST">
                 @csrf
 
-                {{-- Nome + E-mail lado a lado --}}
+                {{-- Nome + E-mail --}}
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                     <div class="form-group">
                         <label class="form-label" for="name">Nome completo *</label>
-                        <input type="text"
-                               id="name" name="name"
+                        <input type="text" id="name" name="name"
                                class="form-control @error('name') is-invalid @enderror"
-                               value="{{ old('name') }}"
-                               placeholder="Nome completo"
+                               value="{{ old('name') }}" placeholder="Nome completo"
                                required autofocus>
                         @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="email">E-mail *</label>
-                        <input type="email"
-                               id="email" name="email"
+                        <input type="email" id="email" name="email"
                                class="form-control @error('email') is-invalid @enderror"
-                               value="{{ old('email') }}"
-                               placeholder="email@exemplo.com"
+                               value="{{ old('email') }}" placeholder="email@exemplo.com"
                                required>
                         @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
@@ -54,9 +49,8 @@
 
                 {{-- Perfil --}}
                 <div class="form-group">
-                    <label class="form-label" for="role">Perfil de acesso *</label>
-                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;" id="role-options">
-
+                    <label class="form-label">Perfil de acesso *</label>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
                         @foreach(['admin' => ['🛡️','Admin','Acesso total ao sistema'], 'professor' => ['🧑‍🏫','Professor','Reservas e horários'], 'aluno' => ['🎒','Aluno','Avisos e biblioteca']] as $value => [$icon, $label, $desc])
                         <label class="role-card {{ old('role') === $value ? 'selected' : '' }}"
                                for="role_{{ $value }}"
@@ -71,32 +65,49 @@
                             <div style="font-size:.75rem;color:var(--text-secondary);margin-top:2px;">{{ $desc }}</div>
                         </label>
                         @endforeach
-
                     </div>
                     @error('role') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
 
-                {{-- Matrícula — só aparece para aluno --}}
-                <div class="form-group" id="campo-matricula" style="display:none;">
-                    <label class="form-label" for="matricula">Matrícula *</label>
-                    <input type="text"
-                           id="matricula" name="matricula"
-                           class="form-control @error('matricula') is-invalid @enderror"
-                           value="{{ old('matricula') }}"
-                           placeholder="Ex: 2026001">
-                    @error('matricula') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                {{-- Campos exclusivos de Aluno — ocultos por padrão --}}
+                <div id="campos-aluno" style="display:none;">
+
+                    {{-- Matrícula --}}
+                    <div class="form-group">
+                        <label class="form-label" for="matricula">Matrícula *</label>
+                        <input type="text" id="matricula" name="matricula"
+                               class="form-control @error('matricula') is-invalid @enderror"
+                               value="{{ old('matricula') }}"
+                               placeholder="Ex: 2026001">
+                        @error('matricula') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    {{-- Turma --}}
+                    <div class="form-group">
+                        <label class="form-label" for="turma_id">Turma</label>
+                        <select id="turma_id" name="turma_id"
+                                class="form-control @error('turma_id') is-invalid @enderror">
+                            <option value="">Sem turma atribuída</option>
+                            @foreach($turmas as $turma)
+                                <option value="{{ $turma->id }}"
+                                        {{ old('turma_id') == $turma->id ? 'selected' : '' }}>
+                                    {{ $turma->serie }}º ano {{ $turma->turma }} — {{ ucfirst($turma->turno) }} ({{ $turma->ano_letivo }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('turma_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
                 </div>
 
-                {{-- Senha + Confirmação --}}
+                {{-- Senha --}}
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                     <div class="form-group">
                         <label class="form-label" for="password">Senha *</label>
                         <div style="position:relative;">
-                            <input type="password"
-                                   id="password" name="password"
+                            <input type="password" id="password" name="password"
                                    class="form-control @error('password') is-invalid @enderror"
-                                   placeholder="Mínimo 8 caracteres"
-                                   required>
+                                   placeholder="Mínimo 8 caracteres" required>
                             <button type="button" onclick="toggleSenha('password','ico1')"
                                     style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:none;color:var(--text-secondary);cursor:pointer;">
                                 <i class="bi bi-eye" id="ico1"></i>
@@ -108,11 +119,8 @@
                     <div class="form-group">
                         <label class="form-label" for="password_confirmation">Confirmar senha *</label>
                         <div style="position:relative;">
-                            <input type="password"
-                                   id="password_confirmation" name="password_confirmation"
-                                   class="form-control"
-                                   placeholder="Repita a senha"
-                                   required>
+                            <input type="password" id="password_confirmation" name="password_confirmation"
+                                   class="form-control" placeholder="Repita a senha" required>
                             <button type="button" onclick="toggleSenha('password_confirmation','ico2')"
                                     style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:none;background:none;color:var(--text-secondary);cursor:pointer;">
                                 <i class="bi bi-eye" id="ico2"></i>
@@ -121,7 +129,6 @@
                     </div>
                 </div>
 
-                {{-- Botões --}}
                 <div style="display:flex; gap:10px; margin-top:8px; padding-top:20px; border-top:1px solid var(--border-color);">
                     <button type="submit" class="btn btn-primary">✓ Criar Usuário</button>
                     <a href="{{ route('admin.usuarios.index') }}" class="btn btn-secondary">Cancelar</a>
@@ -133,29 +140,21 @@
 
 @endsection
 
-@push('styles')
-<style>
-    .role-card:hover { border-color: var(--blue-primary) !important; background: #f0f6ff; }
-    .role-card.selected { border-color: var(--blue-primary) !important; background: #e8f0fe; }
-</style>
-@endpush
-
 @push('scripts')
 <script>
     function handleRole(value) {
-        // Atualiza visual dos cards
         document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
         document.querySelector(`[for="role_${value}"]`).classList.add('selected');
 
-        // Mostra/esconde matrícula
-        const campo = document.getElementById('campo-matricula');
-        const input = document.getElementById('matricula');
+        const camposAluno = document.getElementById('campos-aluno');
+        const matricula   = document.getElementById('matricula');
+
         if (value === 'aluno') {
-            campo.style.display = 'block';
-            input.required = true;
+            camposAluno.style.display = 'block';
+            matricula.required = true;
         } else {
-            campo.style.display = 'none';
-            input.required = false;
+            camposAluno.style.display = 'none';
+            matricula.required = false;
         }
     }
 
@@ -171,7 +170,6 @@
         }
     }
 
-    // Aplica estado inicial se houver old('role')
     document.addEventListener('DOMContentLoaded', function () {
         const checked = document.querySelector('input[name="role"]:checked');
         if (checked) handleRole(checked.value);

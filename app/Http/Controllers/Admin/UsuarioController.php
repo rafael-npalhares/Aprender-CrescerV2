@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Professor;
 use App\Models\Aluno;
+use App\Models\Turma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,7 +20,8 @@ class UsuarioController extends Controller
 
     public function create()
     {
-        return view('admin.usuarios.create');
+        $turmas = Turma::where('ativa', true)->orderBy('serie')->orderBy('turma')->get();
+        return view('admin.usuarios.create', compact('turmas'));
     }
 
     public function store(Request $request)
@@ -30,6 +32,7 @@ class UsuarioController extends Controller
             'password'  => 'required|min:8|confirmed',
             'role'      => 'required|in:admin,professor,aluno',
             'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula',
+            'turma_id'  => 'nullable|exists:turmas,id',
         ]);
 
         $user = User::create([
@@ -47,7 +50,7 @@ class UsuarioController extends Controller
             Aluno::create([
                 'user_id'   => $user->id,
                 'matricula' => $request->matricula,
-                'turma_id'  => null,
+                'turma_id'  => $request->turma_id,
             ]);
         }
 
@@ -57,7 +60,8 @@ class UsuarioController extends Controller
 
     public function edit(User $usuario)
     {
-        return view('admin.usuarios.edit', compact('usuario'));
+        $turmas = Turma::where('ativa', true)->orderBy('serie')->orderBy('turma')->get();
+        return view('admin.usuarios.edit', compact('usuario', 'turmas'));
     }
 
     public function update(Request $request, User $usuario)
@@ -68,6 +72,7 @@ class UsuarioController extends Controller
             'role'      => 'required|in:admin,professor,aluno',
             'password'  => 'nullable|min:8|confirmed',
             'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula,' . optional($usuario->aluno)->id,
+            'turma_id'  => 'nullable|exists:turmas,id',
         ]);
 
         $dados = $request->only('name', 'email', 'role');
@@ -86,23 +91,37 @@ class UsuarioController extends Controller
             if ($roleAnterior === 'professor') {
                 $usuario->professor?->delete();
             }
-
             if ($roleAnterior === 'aluno') {
                 $usuario->aluno?->delete();
             }
         }
 
-        // Cria o novo perfil se ainda não existir
+        // Professor: cria perfil se não existir
         if ($roleNovo === 'professor' && !$usuario->fresh()->professor) {
             Professor::create(['user_id' => $usuario->id, 'disciplina' => null]);
         }
 
-        if ($roleNovo === 'aluno' && !$usuario->fresh()->aluno) {
-            Aluno::create([
-                'user_id'   => $usuario->id,
-                'matricula' => $request->matricula,
-                'turma_id'  => null,
-            ]);
+        // Aluno: cria perfil se não existir, ou atualiza turma/matrícula se já existir
+        if ($roleNovo === 'aluno') {
+            $alunoAtual = $usuario->fresh()->aluno;
+
+            if (!$alunoAtual) {
+                Aluno::create([
+                    'user_id'   => $usuario->id,
+                    'matricula' => $request->matricula,
+                    'turma_id'  => $request->turma_id,
+                ]);
+            } else {
+                // Atualiza turma sempre que enviada
+                $dadosAluno = ['turma_id' => $request->turma_id];
+
+                // Atualiza matrícula apenas se enviada (evita sobrescrever com null)
+                if ($request->filled('matricula')) {
+                    $dadosAluno['matricula'] = $request->matricula;
+                }
+
+                $alunoAtual->update($dadosAluno);
+            }
         }
 
         return redirect()->route('admin.usuarios.index')

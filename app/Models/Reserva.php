@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reserva extends Model
 {
@@ -20,6 +20,15 @@ class Reserva extends Model
         'status',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'data' => 'date',
+        ];
+    }
+
+    // ─── Relacionamentos ──────────────────────────────────────────────────────
+
     public function professor()
     {
         return $this->belongsTo(User::class, 'professor_id');
@@ -33,5 +42,17 @@ class Reserva extends Model
     public function equipamento()
     {
         return $this->belongsTo(Equipamento::class);
+    }
+
+    // ─── Scopes ───────────────────────────────────────────────────────────────
+
+    public function scopePendentes($query)
+    {
+        return $query->where('status', 'pendente');
+    }
+
+    public function scopeAprovadas($query)
+    {
+        return $query->where('status', 'aprovada');
     }
 }

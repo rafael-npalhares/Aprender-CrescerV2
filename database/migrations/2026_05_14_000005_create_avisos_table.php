@@ -13,7 +13,8 @@ return new class extends Migration {
             $table->string('titulo', 200);
             $table->text('conteudo');
             $table->enum('visivel_para', ['todos', 'alunos', 'professores'])->default('todos');
-            $table->date('data_expiracao')->nullable();
+            // data_expiracao REMOVIDA — não será utilizada
+            // fixado funciona como toggle (admin pode fixar e desfixar)
             $table->boolean('fixado')->default(false);
             $table->boolean('ativo')->default(true);
             $table->timestamps();

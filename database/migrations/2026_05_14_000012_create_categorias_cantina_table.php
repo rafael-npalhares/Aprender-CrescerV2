@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('professores', function (Blueprint $table) {
+        // Deve rodar ANTES de produtos_cantina pois produtos referenciam categorias
+        Schema::create('categorias_cantina', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('disciplina', 100)->nullable();
+            $table->string('nome', 100); // Ex: Lanche, Bebida, Sobremesa, Salgado
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('professores');
+        Schema::dropIfExists('categorias_cantina');
     }
 };

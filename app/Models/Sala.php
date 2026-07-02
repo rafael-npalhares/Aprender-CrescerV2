@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sala extends Model
 {
@@ -13,6 +13,15 @@ class Sala extends Model
         'nome',
         'disponivel',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'disponivel' => 'boolean',
+        ];
+    }
+
+    // ─── Relacionamentos ──────────────────────────────────────────────────────
 
     public function reservas()
     {

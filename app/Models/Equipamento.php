@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Equipamento extends Model
 {
@@ -14,6 +14,15 @@ class Equipamento extends Model
         'descricao',
         'disponivel',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'disponivel' => 'boolean',
+        ];
+    }
+
+    // ─── Relacionamentos ──────────────────────────────────────────────────────
 
     public function reservas()
     {

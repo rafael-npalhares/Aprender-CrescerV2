@@ -27,36 +27,36 @@ class BibliotecaController extends Controller
     public function emprestar(Request $request)
     {
         $request->validate(['livro_id' => 'required|exists:livros,id']);
-
+    
         $emprestimosAtivos = Emprestimo::where('user_id', auth()->id())
                                        ->where('status', 'ativo')
                                        ->count();
-
+    
         if ($emprestimosAtivos >= 2) {
             return back()->with('erro', 'Você já tem 2 livros emprestados.');
         }
-
+    
         $livro = Livro::findOrFail($request->livro_id);
-
+    
         if ($livro->qtd_disponivel <= 0) {
             return back()->with('erro', 'Livro indisponível no momento.');
         }
-
+    
         Emprestimo::create([
-            'user_id'         => auth()->id(),
-            'livro_id'        => $livro->id,
-            'data_emprestimo' => now(),
-            'status'          => 'ativo',
+            'user_id'                  => auth()->id(),
+            'livro_id'                 => $livro->id,
+            'data_emprestimo'          => now(),
+            'data_prevista_devolucao'  => now()->addDays(15), // ← linha que faltava
+            'status'                   => 'ativo',
         ]);
-
+    
         $livro->decrement('qtd_disponivel');
-
+    
         return back()->with('sucesso', 'Livro emprestado!');
     }
 
     public function renovar(Emprestimo $emp)
     {
-        // Verifica se o empréstimo pertence ao usuário logado
         if ($emp->user_id !== auth()->id()) {
             abort(403, 'Ação não autorizada.');
         }
@@ -71,31 +71,27 @@ class BibliotecaController extends Controller
     }
 
     public function devolver(Emprestimo $emp)
-    {
-        // Verifica se o empréstimo pertence ao usuário logado
-        if ($emp->user_id !== auth()->id()) {
-            abort(403, 'Ação não autorizada.');
-        }
+{
+    
+    $emp->update([
+        'status'         => 'devolvido',
+        'data_devolucao' => now(),
+    ]);
 
-        $emp->update([
-            'status'         => 'devolvido',
-            'data_devolucao' => now(),
-        ]);
+    $emp->livro->increment('qtd_disponivel');
 
-        $emp->livro->increment('qtd_disponivel');
+    return back()->with('sucesso', 'Livro devolvido!');
+}
 
-        return back()->with('sucesso', 'Livro devolvido!');
-    }
+   public function meusEmprestimos()
+{
+    $emprestimos = Emprestimo::where('user_id', auth()->id())
+                             ->with('livro')
+                             ->latest()
+                             ->paginate(10); // antes era ->get()
 
-    public function meusEmprestimos()
-    {
-        $emprestimos = Emprestimo::where('user_id', auth()->id())
-                                 ->with('livro')
-                                 ->latest()
-                                 ->get();
-
-        return view('biblioteca.emprestimos', compact('emprestimos'));
-    }
+    return view('biblioteca.emprestimos', compact('emprestimos'));
+}
 
     public function createLivro()
     {
@@ -105,13 +101,17 @@ class BibliotecaController extends Controller
     public function storeLivro(Request $request)
     {
         $request->validate([
-            'titulo'         => 'required|string|max:300',
-            'autor'          => 'required|string|max:200',
-            'qtd_total'      => 'required|integer|min:1',
-            'qtd_disponivel' => 'required|integer|min:0',
+            'titulo'    => 'required|string|max:300',
+            'autor'     => 'required|string|max:200',
+            'qtd_total' => 'required|integer|min:1',
         ]);
 
-        Livro::create($request->all());
+        Livro::create([
+            'titulo'         => $request->titulo,
+            'autor'          => $request->autor,
+            'qtd_total'      => $request->qtd_total,
+            'qtd_disponivel' => $request->qtd_total, // todos disponíveis na criação
+        ]);
 
         return redirect()->route('admin.biblioteca.index')
                          ->with('sucesso', 'Livro adicionado!');
@@ -124,14 +124,22 @@ class BibliotecaController extends Controller
 
     public function updateLivro(Request $request, Livro $livro)
     {
+        $emprestados = $livro->qtd_total - $livro->qtd_disponivel;
+
         $request->validate([
-            'titulo'         => 'required|string|max:300',
-            'autor'          => 'required|string|max:200',
-            'qtd_total'      => 'required|integer|min:1',
-            'qtd_disponivel' => 'required|integer|min:0',
+            'titulo'    => 'required|string|max:300',
+            'autor'     => 'required|string|max:200',
+            'qtd_total' => 'required|integer|min:' . $emprestados,
         ]);
 
-        $livro->update($request->only('titulo', 'autor', 'qtd_total', 'qtd_disponivel'));
+        $diferenca = $request->qtd_total - $livro->qtd_total;
+
+        $livro->update([
+            'titulo'         => $request->titulo,
+            'autor'          => $request->autor,
+            'qtd_total'      => $request->qtd_total,
+            'qtd_disponivel' => $livro->qtd_disponivel + $diferenca,
+        ]);
 
         return redirect()->route('admin.biblioteca.index')
                          ->with('sucesso', 'Livro atualizado!');
@@ -148,6 +156,21 @@ class BibliotecaController extends Controller
     public function emprestimos()
     {
         $emprestimos = Emprestimo::with(['usuario', 'livro'])->latest()->paginate(15);
-        return view('admin.biblioteca.emprestimos', compact('emprestimos'));
+        return view('admin.biblioteca.emprestimos', compact('emprestimos')); 
     }
+    
+    public function showLivro(Livro $livro)
+{
+    $emprestimosAtivos = collect();
+
+    if (auth()->user()->isAdmin()) {
+        $emprestimosAtivos = Emprestimo::where('livro_id', $livro->id)
+                                       ->where('status', '!=', 'devolvido')
+                                       ->with('usuario')
+                                       ->latest()
+                                       ->get();
+    }
+
+    return view('biblioteca.show', compact('livro', 'emprestimosAtivos'));
+}
 }

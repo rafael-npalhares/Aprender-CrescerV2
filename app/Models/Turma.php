@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Turma extends Model
 {
@@ -17,6 +17,15 @@ class Turma extends Model
         'ativa',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'ativa' => 'boolean',
+        ];
+    }
+
+    // ─── Relacionamentos ──────────────────────────────────────────────────────
+
     public function alunos()
     {
         return $this->hasMany(Aluno::class);
@@ -25,5 +34,14 @@ class Turma extends Model
     public function gradeHorarios()
     {
         return $this->hasMany(GradeHorario::class);
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
+    // Retorna o nome completo formatado da turma, ex: "1º Ano A — Manhã"
+    public function getNomeCompletoAttribute(): string
+    {
+        $turnos = ['manha' => 'Manhã', 'tarde' => 'Tarde', 'noite' => 'Noite'];
+        return "{$this->serie}º Ano {$this->turma} — " . ($turnos[$this->turno] ?? $this->turno);
     }
 }

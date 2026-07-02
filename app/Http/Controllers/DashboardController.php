@@ -17,6 +17,9 @@ class DashboardController extends Controller
         if ($user->isProfessor()) {
             return redirect()->route('professor.dashboard');
         }
+        if ($user->isGerente()) {
+            return redirect()->route('gerente.dashboard');
+        }
 
         return redirect()->route('aluno.dashboard');
     }

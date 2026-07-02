@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Aluno extends Model
 {
     use HasFactory;
 
-    // Bloco 1 - Fillable
     protected $fillable = [
         'user_id',
         'turma_id',
@@ -17,7 +16,34 @@ class Aluno extends Model
         'data_nascimento',
     ];
 
-    // Bloco 2 - Relacionamentos
+    protected function casts(): array
+    {
+        return [
+            'data_nascimento' => 'date',
+        ];
+    }
+
+    // ─── Geração automática de matrícula ─────────────────────────────────────
+    // Formato: AP + ano_atual + sequencial com 4 dígitos
+    // Exemplo: AP20260001, AP20260002, AP20260003 ...
+    // Executado automaticamente antes de cada INSERT
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (Aluno $aluno) {
+            if (empty($aluno->matricula)) {
+                $ano       = date('Y');
+                $ultimo    = static::whereRaw("matricula LIKE 'AP{$ano}%'")->count();
+                $sequencia = $ultimo + 1;
+                $aluno->matricula = 'AP' . $ano . str_pad($sequencia, 4, '0', STR_PAD_LEFT);
+            }
+        });
+    }
+
+    // ─── Relacionamentos ──────────────────────────────────────────────────────
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -26,15 +52,5 @@ class Aluno extends Model
     public function turma()
     {
         return $this->belongsTo(Turma::class);
-    }
-
-    public function emprestimos()
-    {
-        return $this->hasMany(Emprestimo::class, 'user_id', 'user_id');
-    }
-
-    public function pedidos()
-    {
-        return $this->hasMany(PedidoCantina::class, 'user_id', 'user_id');
     }
 }
