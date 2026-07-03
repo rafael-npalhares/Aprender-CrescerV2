@@ -411,7 +411,7 @@
 
             <li><a href="{{ route('professor.dashboard') }}"
                    class="nav-link {{ request()->routeIs('professor.dashboard') ? 'active' : '' }}">
-                <i class="bi bi-speedometer2"></i> Dashboard
+                <i class="bi bi-person-circle"></i> Perfil
             </a></li>
 
             <li class="sidebar-section">Acadêmico</li>

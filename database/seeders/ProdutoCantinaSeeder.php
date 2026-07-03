@@ -10,47 +10,86 @@ class ProdutoCantinaSeeder extends Seeder
 {
     public function run(): void
     {
-        $lanche    = CategoriaCantina::where('nome', 'Lanche')->first();
-        $refeicao  = CategoriaCantina::where('nome', 'Refeição')->first();
-        $bebida    = CategoriaCantina::where('nome', 'Bebida')->first();
-        $sobremesa = CategoriaCantina::where('nome', 'Sobremesa')->first();
-        $salgado   = CategoriaCantina::where('nome', 'Salgado')->first();
-        $fruta     = CategoriaCantina::where('nome', 'Fruta')->first();
+        // Limpa na ordem certa por causa das FKs
+        ProdutoCantina::truncate();
+        CategoriaCantina::truncate();
+
+        // ── Categorias ──
+        $lanche = CategoriaCantina::create(['nome' => 'Lanche']);
+        $bebida = CategoriaCantina::create(['nome' => 'Bebida']);
+
+        // ── Produtos ──
+        // As fotos ficam em public/img/cantina/
+        // Referenciadas via asset('img/cantina/nome-do-arquivo')
 
         $produtos = [
-            // Lanches
-            ['categoria' => $lanche,    'nome' => 'Pão de Queijo',        'descricao' => 'Pão de queijo quentinho, 3 unidades.',   'preco' => 5.00,  'estoque' => 30],
-            ['categoria' => $lanche,    'nome' => 'Misto Quente',         'descricao' => 'Sanduíche de presunto e queijo grelhado.','preco' => 8.50,  'estoque' => 20],
-            ['categoria' => $lanche,    'nome' => 'Cachorro-Quente',      'descricao' => 'Salsicha, molho e batata palha.',          'preco' => 9.00,  'estoque' => 15],
-            // Refeições
-            ['categoria' => $refeicao,  'nome' => 'Marmita Completa',     'descricao' => 'Arroz, feijão, carne e salada.',          'preco' => 18.00, 'estoque' => 25],
-            ['categoria' => $refeicao,  'nome' => 'Macarrão ao Molho',    'descricao' => 'Macarrão parafuso ao molho vermelho.',    'preco' => 14.00, 'estoque' => 20],
-            // Bebidas
-            ['categoria' => $bebida,    'nome' => 'Suco de Laranja',      'descricao' => 'Suco natural 300ml.',                    'preco' => 6.00,  'estoque' => 40],
-            ['categoria' => $bebida,    'nome' => 'Refrigerante Lata',    'descricao' => 'Lata 350ml (Coca, Guaraná ou Sprite).',  'preco' => 5.00,  'estoque' => 50],
-            ['categoria' => $bebida,    'nome' => 'Água Mineral',         'descricao' => 'Garrafa 500ml.',                         'preco' => 3.00,  'estoque' => 60],
-            ['categoria' => $bebida,    'nome' => 'Achocolatado',         'descricao' => 'Caixinha 200ml.',                        'preco' => 4.00,  'estoque' => 35],
-            // Sobremesas
-            ['categoria' => $sobremesa, 'nome' => 'Bolo de Chocolate',    'descricao' => 'Fatia de bolo de chocolate com cobertura.','preco' => 7.00, 'estoque' => 20],
-            ['categoria' => $sobremesa, 'nome' => 'Pudim',                'descricao' => 'Porção individual de pudim de leite.',   'preco' => 6.50,  'estoque' => 15],
-            // Salgados
-            ['categoria' => $salgado,   'nome' => 'Coxinha',              'descricao' => 'Coxinha de frango 120g.',                'preco' => 5.50,  'estoque' => 25],
-            ['categoria' => $salgado,   'nome' => 'Esfiha',               'descricao' => 'Esfiha de carne ou queijo.',             'preco' => 4.50,  'estoque' => 30],
-            // Frutas
-            ['categoria' => $fruta,     'nome' => 'Banana',               'descricao' => 'Banana prata unidade.',                  'preco' => 2.00,  'estoque' => 0],  // esgotado de exemplo
-            ['categoria' => $fruta,     'nome' => 'Maçã',                 'descricao' => 'Maçã Fuji unidade.',                     'preco' => 2.50,  'estoque' => 20],
+            [
+                'categoria_id'       => $lanche->id,
+                'nome'               => 'Espetinho',
+                'descricao'          => 'Espetinho de carne ou frango grelhado com farofa e vinagrete.',
+                'preco'              => 8.00,
+                'quantidade_estoque' => 30,
+                'foto'               => 'img/cantina/espetinho.jpeg',
+                'ativo'              => 1,
+            ],
+            [
+                'categoria_id'       => $lanche->id,
+                'nome'               => 'Mini Pizza',
+                'descricao'          => 'Mini pizza assada — sabores: calabresa ou frango.',
+                'preco'              => 7.00,
+                'quantidade_estoque' => 25,
+                'foto'               => 'img/cantina/mini-pizza.jpg',
+                'ativo'              => 1,
+            ],
+            [
+                'categoria_id'       => $lanche->id,
+                'nome'               => 'Wrap de Frango',
+                'descricao'          => 'Wrap recheado com frango desfiado ao molho.',
+                'preco'              => 9.00,
+                'quantidade_estoque' => 20,
+                'foto'               => 'img/cantina/wrap-frango.png',
+                'ativo'              => 1,
+            ],
+            [
+                'categoria_id'       => $lanche->id,
+                'nome'               => 'Hot-Dog',
+                'descricao'          => 'Hot-dog clássico com salsicha, molhos e queijo ralado.',
+                'preco'              => 8.50,
+                'quantidade_estoque' => 25,
+                'foto'               => 'img/cantina/hot-dog.jpeg',
+                'ativo'              => 1,
+            ],
+            [
+                'categoria_id'       => $lanche->id,
+                'nome'               => 'Esfirra',
+                'descricao'          => 'Esfirra de forno — carne, frango ou queijo.',
+                'preco'              => 5.00,
+                'quantidade_estoque' => 30,
+                'foto'               => 'img/cantina/esfirra.jpg',
+                'ativo'              => 1,
+            ],
+            [
+                'categoria_id'       => $lanche->id,
+                'nome'               => 'Pastel Frito',
+                'descricao'          => 'Pastel frito crocante — carne ou queijo.',
+                'preco'              => 6.00,
+                'quantidade_estoque' => 20,
+                'foto'               => 'img/cantina/pastel.jpeg',
+                'ativo'              => 1,
+            ],
+            [
+                'categoria_id'       => $bebida->id,
+                'nome'               => 'Refrigerante',
+                'descricao'          => 'Lata 350ml — Coca-Cola, Pepsi, Guaraná ou Fanta.',
+                'preco'              => 5.00,
+                'quantidade_estoque' => 50,
+                'foto'               => 'img/cantina/refrigerante.jpg',
+                'ativo'              => 1,
+            ],
         ];
 
         foreach ($produtos as $p) {
-            ProdutoCantina::create([
-                'categoria_id'      => $p['categoria']?->id,
-                'nome'              => $p['nome'],
-                'descricao'         => $p['descricao'],
-                'foto'              => null, // fotos adicionadas pelo admin via painel
-                'preco'             => $p['preco'],
-                'quantidade_estoque'=> $p['estoque'],
-                'ativo'             => true,
-            ]);
+            ProdutoCantina::create($p);
         }
     }
 }

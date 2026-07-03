@@ -73,7 +73,7 @@ class CantinaController extends Controller
     public function createProduto()
     {
         $categorias = CategoriaCantina::orderBy('nome')->get();
-        return view('cantina.produto-form', compact('categorias'));
+        return view('admin.cantina.produto-form', compact('categorias'));
     }
 
     public function storeProduto(Request $request)
@@ -104,7 +104,7 @@ class CantinaController extends Controller
     public function editProduto(ProdutoCantina $produto)
     {
         $categorias = CategoriaCantina::orderBy('nome')->get();
-        return view('cantina.produto-form', compact('produto', 'categorias'));
+        return view('admin.cantina.produto-form', compact('produto', 'categorias'));
     }
 
     public function updateProduto(Request $request, ProdutoCantina $produto)

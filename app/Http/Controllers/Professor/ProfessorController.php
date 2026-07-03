@@ -7,7 +7,7 @@ use App\Models\Aviso;
 use App\Models\GradeHorario;
 use App\Models\Reserva;
 
-class ProfessorController extends Controller
+class ProfessorController extends Controller 
 {
     public function index()
     {

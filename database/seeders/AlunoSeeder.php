@@ -37,7 +37,6 @@ class AlunoSeeder extends Seeder
                 'role'     => 'aluno',
             ]);
 
-            // Matrícula gerada aqui no seeder seguindo o mesmo padrão do Model Aluno::boot()
             // Formato: AP + ano + sequencial com 4 dígitos → AP20260001
             $ano       = date('Y');
             $sequencia = Aluno::count() + 1;

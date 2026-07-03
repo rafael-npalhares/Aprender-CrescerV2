@@ -16,7 +16,7 @@ class ReservaController extends Controller
                            ->with(['sala', 'equipamento'])
                            ->latest()->paginate(10);
 
-        return view('professor.reservas.index', compact('reservas'));
+        return view('professor.index', compact('reservas'));
     }
 
     public function create()
@@ -24,7 +24,7 @@ class ReservaController extends Controller
         $salas        = Sala::where('disponivel', true)->get();
         $equipamentos = Equipamento::where('disponivel', true)->get();
 
-        return view('professor.reservas.create', compact('salas', 'equipamentos'));
+        return view('professor.create', compact('salas', 'equipamentos'));
     }
 
     public function store(Request $request)

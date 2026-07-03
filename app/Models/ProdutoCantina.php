@@ -29,7 +29,7 @@ class ProdutoCantina extends Model
         ];
     }
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
+    // ─── Relacionamentos ─────────────────────────────────────────────────────
 
     public function categoria()
     {
@@ -41,29 +41,31 @@ class ProdutoCantina extends Model
         return $this->hasMany(ItensPedidoCantina::class, 'produto_id');
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
+    // ─── Helpers ─────────────────────────────────────────────────────────────
 
-    // Produto esgotado quando estoque = 0
     public function getEsgotadoAttribute(): bool
     {
         return $this->quantidade_estoque <= 0;
     }
 
-    // URL da foto ou placeholder se não tiver foto cadastrada
+    /**
+     * Fotos ficam em public/img/cantina/
+     * No banco salvo como: img/cantina/espetinho.jpeg
+     * Acessado via: asset('img/cantina/espetinho.jpeg')
+     */
     public function getFotoUrlAttribute(): string
     {
         return $this->foto
-            ? asset('storage/' . $this->foto)
-            : asset('img/produto-sem-foto.png');
+            ? asset($this->foto)
+            : asset('img/cantina/sem-foto.png');
     }
 
-    // Preço formatado em reais: R$ 9,50
     public function getPrecoFormatadoAttribute(): string
     {
         return 'R$ ' . number_format($this->preco, 2, ',', '.');
     }
 
-    // ─── Scopes ───────────────────────────────────────────────────────────────
+    // ─── Scopes ──────────────────────────────────────────────────────────────
 
     public function scopeAtivos($query)
     {

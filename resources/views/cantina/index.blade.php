@@ -85,7 +85,6 @@
     .empty-cat { grid-column: 1/-1; text-align: center; padding: 3.5rem 1rem; color: var(--text-secondary); }
     .empty-cat i { font-size: 2.5rem; display: block; margin-bottom: .75rem; color: var(--border-color); }
 
-    /* carrinho flutuante */
     .cart-bar {
         position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
         background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main);
@@ -147,7 +146,7 @@
 
             <div class="food-cover">
                 @if($item->foto)
-                    <img src="{{ asset('storage/'.$item->foto) }}" alt="{{ $item->nome }}">
+                    <img src="{{ $item->foto_url }}" alt="{{ $item->nome }}">
                 @else
                     <i class="bi bi-cup-straw"></i>
                 @endif
@@ -247,7 +246,6 @@ function alterarQtd(produtoId, delta, estoqueMax) {
 function adicionarAoCarrinho(produtoId, nome, preco, estoqueMax) {
     const qtd = parseInt(document.getElementById('qtd-' + produtoId).textContent, 10);
     if (qtd <= 0) { alert('Selecione ao menos 1 unidade antes de adicionar.'); return; }
-
     if (carrinho[produtoId]) {
         carrinho[produtoId].quantidade += qtd;
     } else {
@@ -261,10 +259,8 @@ function atualizarCartBar() {
     const ids = Object.keys(carrinho);
     const bar = document.getElementById('cartBar');
     if (ids.length === 0) { bar.classList.remove('show'); return; }
-
     let totalItens = 0, totalValor = 0;
     ids.forEach(id => { totalItens += carrinho[id].quantidade; totalValor += carrinho[id].quantidade * carrinho[id].preco; });
-
     document.getElementById('cartCount').textContent = totalItens + ' ite' + (totalItens > 1 ? 'ns' : 'm');
     document.getElementById('cartTotal').textContent = 'R$ ' + totalValor.toFixed(2).replace('.', ',');
     bar.classList.add('show');
@@ -273,25 +269,20 @@ function atualizarCartBar() {
 function abrirFinalizar() {
     const ids = Object.keys(carrinho);
     if (ids.length === 0) return;
-
     const resumo = document.getElementById('resumoCarrinho');
     const hiddenWrap = document.getElementById('itensHidden');
     resumo.innerHTML = ''; hiddenWrap.innerHTML = '';
-
     let total = 0;
     ids.forEach((id, idx) => {
         const item = carrinho[id];
         const subtotal = (item.quantidade * item.preco).toFixed(2).replace('.', ',');
         total += item.quantidade * item.preco;
-
         resumo.innerHTML += `<div class="cart-item-row"><span>${item.quantidade}× ${item.nome}</span><span>R$ ${subtotal}</span></div>`;
         hiddenWrap.innerHTML += `<input type="hidden" name="itens[${idx}][produto_id]" value="${id}">
                                   <input type="hidden" name="itens[${idx}][quantidade]" value="${item.quantidade}">`;
     });
-
     resumo.innerHTML += `<div class="cart-item-row" style="font-weight:700;border-top:1px solid var(--border-color);margin-top:.5rem;padding-top:.5rem;">
                             <span>Total</span><span>R$ ${total.toFixed(2).replace('.', ',')}</span></div>`;
-
     new bootstrap.Modal(document.getElementById('modalFinalizar')).show();
 }
 </script>
