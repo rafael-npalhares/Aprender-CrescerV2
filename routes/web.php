@@ -80,6 +80,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/cantina/pedidos',                   [CantinaController::class, 'pedidos'])       ->name('cantina.pedidos');
     Route::patch('/cantina/pedidos/{pedido}/cancelar',[CantinaController::class, 'cancelar'])     ->name('cantina.pedidos.cancelar');
     Route::delete('/cantina/pedidos/{pedido}',        [CantinaController::class, 'destroy'])      ->name('cantina.pedidos.destroy');
+    Route::patch('cantina/produtos/{produto}/ativar', [CantinaController::class, 'ativarProduto'])
+    ->name('cantina.produtos.ativar');
     
     Route::post('/cantina/categorias',              [CantinaController::class, 'storeCategoria'])  ->name('cantina.categorias.store');
     Route::patch('/cantina/categorias/{categoria}', [CantinaController::class, 'updateCategoria']) ->name('cantina.categorias.update');

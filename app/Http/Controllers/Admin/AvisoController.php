@@ -10,7 +10,7 @@ class AvisoController extends Controller
 {
     public function index()
     {
-        $avisos = Aviso::with('autor')->latest()->paginate(10);
+        $avisos = Aviso::with('autor')->ordenados()->paginate(10);
         return view('admin.avisos.index', compact('avisos'));
     }
 
@@ -58,17 +58,23 @@ class AvisoController extends Controller
             'ativo'          => 'boolean',
         ]);
 
-        $aviso->update($request->only(
-            'titulo',
-            'conteudo',
-            'visivel_para',
-            'data_expiracao',
-            'fixado',
-            'ativo'
-        ));
+
+        $dados = $request->only('titulo', 'conteudo', 'visivel_para', 'data_expiracao');
+        $dados['fixado'] = $request->boolean('fixado');
+        $dados['ativo']  = $request->boolean('ativo');
+
+        $aviso->update($dados);
 
         return redirect()->route('admin.avisos.index')
                          ->with('sucesso', 'Aviso atualizado!');
+    }
+
+    public function toggleFixado(Aviso $aviso)
+    {
+        $aviso->update(['fixado' => ! $aviso->fixado]);
+
+        return redirect()->route('admin.avisos.index')
+                         ->with('sucesso', $aviso->fixado ? 'Aviso fixado!' : 'Aviso desafixado!');
     }
 
     public function destroy(Aviso $aviso)

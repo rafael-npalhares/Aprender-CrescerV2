@@ -15,8 +15,6 @@ class CategoriaCantina extends Model
         'nome',
     ];
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
-
     public function produtos()
     {
         return $this->hasMany(ProdutoCantina::class, 'categoria_id');

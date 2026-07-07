@@ -24,8 +24,6 @@ class Turma extends Model
         ];
     }
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
-
     public function alunos()
     {
         return $this->hasMany(Aluno::class);
@@ -36,9 +34,6 @@ class Turma extends Model
         return $this->hasMany(GradeHorario::class);
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
-
-    // Retorna o nome completo formatado da turma, ex: "1º Ano A — Manhã"
     public function getNomeCompletoAttribute(): string
     {
         $turnos = ['manha' => 'Manhã', 'tarde' => 'Tarde', 'noite' => 'Noite'];

@@ -23,11 +23,6 @@ class Aluno extends Model
         ];
     }
 
-    // ─── Geração automática de matrícula ─────────────────────────────────────
-    // Formato: AP + ano_atual + sequencial com 4 dígitos
-    // Exemplo: AP20260001, AP20260002, AP20260003 ...
-    // Executado automaticamente antes de cada INSERT
-
     protected static function boot(): void
     {
         parent::boot();
@@ -41,8 +36,6 @@ class Aluno extends Model
             }
         });
     }
-
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
 
     public function user()
     {

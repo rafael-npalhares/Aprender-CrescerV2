@@ -16,8 +16,6 @@ class Livro extends Model
         'qtd_disponivel',
     ];
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
-
     public function emprestimos()
     {
         return $this->hasMany(Emprestimo::class);
@@ -27,8 +25,6 @@ class Livro extends Model
     {
         return $this->hasMany(Emprestimo::class)->where('status', 'ativo');
     }
-
-    // ─── Helpers ──────────────────────────────────────────────────────────────
 
     public function getDisponivelAttribute(): bool
     {

@@ -25,8 +25,6 @@ class ItensPedidoCantina extends Model
         ];
     }
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
-
     public function pedido()
     {
         return $this->belongsTo(PedidoCantina::class, 'pedido_id');
@@ -37,9 +35,6 @@ class ItensPedidoCantina extends Model
         return $this->belongsTo(ProdutoCantina::class, 'produto_id');
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
-
-    // Subtotal do item: quantidade × preco_unitario
     public function getSubtotalAttribute(): float
     {
         return $this->quantidade * $this->preco_unitario;

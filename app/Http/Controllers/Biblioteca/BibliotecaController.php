@@ -46,7 +46,7 @@ class BibliotecaController extends Controller
             'user_id'                  => auth()->id(),
             'livro_id'                 => $livro->id,
             'data_emprestimo'          => now(),
-            'data_prevista_devolucao'  => now()->addDays(15), // ← linha que faltava
+            'data_prevista_devolucao'  => now()->addDays(15), 
             'status'                   => 'ativo',
         ]);
     
@@ -88,7 +88,7 @@ class BibliotecaController extends Controller
     $emprestimos = Emprestimo::where('user_id', auth()->id())
                              ->with('livro')
                              ->latest()
-                             ->paginate(10); // antes era ->get()
+                             ->paginate(10);
 
     return view('biblioteca.emprestimos', compact('emprestimos'));
 }
@@ -110,7 +110,7 @@ class BibliotecaController extends Controller
             'titulo'         => $request->titulo,
             'autor'          => $request->autor,
             'qtd_total'      => $request->qtd_total,
-            'qtd_disponivel' => $request->qtd_total, // todos disponíveis na criação
+            'qtd_disponivel' => $request->qtd_total, 
         ]);
 
         return redirect()->route('admin.biblioteca.index')

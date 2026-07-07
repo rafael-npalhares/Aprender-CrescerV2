@@ -18,7 +18,6 @@ class Aviso extends Model
         'ativo',
     ];
 
-    // data_expiracao foi REMOVIDA do banco — não listar aqui
 
     protected function casts(): array
     {
@@ -28,28 +27,22 @@ class Aviso extends Model
         ];
     }
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
 
     public function autor()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // ─── Scopes ───────────────────────────────────────────────────────────────
-
-    // Apenas avisos ativos
     public function scopeAtivos($query)
     {
         return $query->where('ativo', true);
     }
 
-    // Avisos fixados primeiro, depois por data de criação
     public function scopeOrdenados($query)
     {
         return $query->orderByDesc('fixado')->orderByDesc('created_at');
     }
 
-    // Filtra por visibilidade: retorna 'todos' + o perfil específico
     public function scopeVisivelPara($query, string $perfil)
     {
         return $query->whereIn('visivel_para', ['todos', $perfil . 's']);

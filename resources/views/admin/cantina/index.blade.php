@@ -11,6 +11,35 @@
     .cant-header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin: 0; }
     .cant-header p  { font-size: .85rem; color: var(--text-secondary); margin: .2rem 0 0; }
 
+    /* ── painel de categorias ── */
+    .cat-panel {
+        background: var(--card-bg); border: 1px solid var(--border-color);
+        border-radius: 14px; padding: 1.1rem 1.3rem; margin-bottom: 1.5rem;
+    }
+    .cat-panel-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: .9rem;
+    }
+    .cat-panel-header h2 { font-size: .95rem; font-weight: 700; color: var(--text-main); margin: 0; }
+    .cat-list { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .cat-pill {
+        display: flex; align-items: center; gap: .5rem;
+        background: var(--hover-bg); border: 1px solid var(--border-color);
+        border-radius: 20px; padding: .35rem .5rem .35rem 1rem; font-size: .82rem;
+        color: var(--text-main);
+    }
+    .cat-pill .qtd { color: var(--text-secondary); font-size: .74rem; }
+    .cat-pill-actions { display: flex; gap: .25rem; }
+    .cat-pill-actions button {
+        border: none; background: transparent; width: 24px; height: 24px; border-radius: 50%;
+        cursor: pointer; font-size: .78rem; display: flex; align-items: center; justify-content: center;
+    }
+    .cat-pill-actions .edit-btn { color: #58a6ff; }
+    .cat-pill-actions .edit-btn:hover { background: #1f6feb22; }
+    .cat-pill-actions .del-btn { color: var(--badge-red); }
+    .cat-pill-actions .del-btn:hover { background: var(--badge-red-bg); }
+    .cat-empty { font-size: .82rem; color: var(--text-secondary); }
+
     .cat-tabs {
         display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem;
         border-bottom: 1px solid var(--border-color); padding-bottom: .9rem;
@@ -31,6 +60,7 @@
         transition: border-color .2s, transform .15s; position: relative;
     }
     .food-card:hover { border-color: var(--blue-primary); transform: translateY(-2px); }
+    .food-card.inativo { opacity: .6; }
 
     .food-cover {
         width: 100%; height: 130px; border-radius: 10px; margin-bottom: .9rem;
@@ -42,6 +72,12 @@
     .food-esgotado-badge {
         position: absolute; top: 12px; right: 12px;
         background: var(--badge-red-bg); color: var(--badge-red);
+        font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+        padding: .25rem .6rem; border-radius: 20px;
+    }
+    .food-inativo-badge {
+        position: absolute; top: 12px; left: 12px;
+        background: #8b949e22; color: var(--text-secondary);
         font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
         padding: .25rem .6rem; border-radius: 20px;
     }
@@ -99,6 +135,89 @@
     </div>
 @endif
 
+{{-- ── PAINEL: GERENCIAR CATEGORIAS ── --}}
+<div class="cat-panel">
+    <div class="cat-panel-header">
+        <h2><i class="bi bi-tags-fill" style="color:var(--blue-primary);"></i> Categorias</h2>
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalNovaCategoria">
+            <i class="bi bi-plus-lg"></i> Nova categoria
+        </button>
+    </div>
+
+    @if($categorias->count())
+    <div class="cat-list">
+        @foreach($categorias as $cat)
+        <div class="cat-pill">
+            <span>{{ $cat->nome }}</span>
+            <span class="qtd">({{ $cat->produtos_count }})</span>
+            <div class="cat-pill-actions">
+                <button type="button" class="edit-btn" title="Editar"
+                        data-bs-toggle="modal" data-bs-target="#modalEditarCategoria{{ $cat->id }}">
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+                <form action="{{ route('admin.cantina.categorias.destroy', $cat->id) }}" method="POST"
+                      onsubmit="return confirm('Excluir a categoria \'{{ addslashes($cat->nome) }}\'?')">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="del-btn" title="Excluir">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {{-- modal de edição desta categoria --}}
+        <div class="modal fade" id="modalEditarCategoria{{ $cat->id }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ route('admin.cantina.categorias.update', $cat->id) }}" method="POST">
+                        @csrf @method('PUT')
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar categoria</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label class="form-label">Nome</label>
+                            <input type="text" name="nome" class="form-control" value="{{ $cat->nome }}" required maxlength="100">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+    @else
+        <p class="cat-empty">Nenhuma categoria cadastrada ainda. Crie uma para poder cadastrar produtos.</p>
+    @endif
+</div>
+
+{{-- modal: nova categoria --}}
+<div class="modal fade" id="modalNovaCategoria" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="{{ route('admin.cantina.categorias.store') }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova categoria</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="nome" class="form-control" placeholder="Ex: Lanches, Bebidas..." required maxlength="100">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Criar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- ── PRODUTOS ── --}}
 @if($produtos->count())
 <div class="cat-tabs">
     @foreach($produtos as $nomeCategoria => $itens)
@@ -120,8 +239,10 @@
             $temEst = $item->quantidade_estoque > 0;
         @endphp
 
-        <div class="food-card">
-            @if(!$temEst)
+        <div class="food-card {{ !$item->ativo ? 'inativo' : '' }}">
+            @if(!$item->ativo)
+                <span class="food-inativo-badge">Inativo</span>
+            @elseif(!$temEst)
                 <span class="food-esgotado-badge">Esgotado</span>
             @endif
 
@@ -148,13 +269,24 @@
                    class="btn btn-outline-secondary btn-sm" style="flex:1;text-align:center;">
                     <i class="bi bi-pencil-fill"></i> Editar
                 </a>
-                <form action="{{ route('admin.cantina.produtos.destroy', $item->id) }}"
-                      method="POST" onsubmit="return confirm('Remover produto?')" style="flex:1;">
-                    @csrf @method('DELETE')
-                    <button class="btn btn-outline-danger btn-sm w-100">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </form>
+
+                @if($item->ativo)
+                    <form action="{{ route('admin.cantina.produtos.destroy', $item->id) }}"
+                          method="POST" onsubmit="return confirm('Desativar produto?')" style="flex:1;">
+                        @csrf @method('DELETE')
+                        <button class="btn btn-outline-danger btn-sm w-100" title="Desativar">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                @else
+                    <form action="{{ route('admin.cantina.produtos.ativar', $item->id) }}"
+                          method="POST" style="flex:1;">
+                        @csrf @method('PATCH')
+                        <button class="btn btn-outline-success btn-sm w-100" title="Reativar">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
         @endforeach

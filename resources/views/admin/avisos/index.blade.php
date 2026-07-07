@@ -59,6 +59,17 @@
 
             {{-- Lado direito: ações --}}
             <div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">
+
+                <form action="{{ route('admin.avisos.toggleFixado', $aviso) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    @if($aviso->fixado)
+                        <button type="submit" class="btn btn-secondary btn-sm" style="width:100%;">📌 Desfixar</button>
+                    @else
+                        <button type="submit" class="btn btn-secondary btn-sm" style="width:100%;">📍 Fixar</button>
+                    @endif
+                </form>
+
                 <a href="{{ route('admin.avisos.edit', $aviso) }}" class="btn btn-secondary btn-sm">✏️ Editar</a>
 
                 <form action="{{ route('admin.avisos.destroy', $aviso) }}" method="POST"

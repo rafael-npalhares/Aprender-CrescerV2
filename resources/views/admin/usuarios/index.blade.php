@@ -106,6 +106,15 @@
     .role-badge.professor { background: #bc8cff22; color: #bc8cff; }
     .role-badge.aluno     { background: #3fb95022; color: #3fb950; }
 
+    /* matrícula */
+    .matricula-tag {
+        font-family: 'DM Sans', monospace; font-size: .78rem;
+        color: #8b949e; background: #0d1117; border: 1px solid #21262d;
+        border-radius: 6px; padding: .2rem .55rem; white-space: nowrap;
+        display: inline-block;
+    }
+    .matricula-vazia { color: #484f58; font-size: .8rem; }
+
     /* ações */
     .actions { display: flex; align-items: center; gap: .4rem; }
     .btn-action {
@@ -180,6 +189,7 @@
                 <tr>
                     <th>Usuário</th>
                     <th>Perfil</th>
+                    <th>Matrícula</th>
                     <th>Cadastrado em</th>
                     <th style="text-align:right">Ações</th>
                 </tr>
@@ -209,6 +219,14 @@
                         </span>
                     </td>
 
+                    <td>
+                        @if($u->role === 'aluno' && $u->aluno)
+                            <span class="matricula-tag">{{ $u->aluno->matricula }}</span>
+                        @else
+                            <span class="matricula-vazia">—</span>
+                        @endif
+                    </td>
+
                     <td style="color:#8b949e;font-size:.82rem">
                         {{ $u->created_at->format('d/m/Y') }}
                     </td>
@@ -234,7 +252,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4">
+                    <td colspan="5">
                         <div class="empty-state">
                             <i class="bi bi-people"></i>
                             <p>Nenhum usuário cadastrado ainda.</p>

@@ -21,8 +21,6 @@ class Sala extends Model
         ];
     }
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
-
     public function reservas()
     {
         return $this->hasMany(Reserva::class);

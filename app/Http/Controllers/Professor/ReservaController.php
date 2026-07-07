@@ -55,7 +55,6 @@ class ReservaController extends Controller
 
     public function destroy(Reserva $reserva)
     {
-        // Garante que só cancela a própria reserva
         if ($reserva->professor_id !== auth()->id()) {
             abort(403);
         }

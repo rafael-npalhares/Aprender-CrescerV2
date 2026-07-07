@@ -27,8 +27,6 @@ class Reserva extends Model
         ];
     }
 
-    // ─── Relacionamentos ──────────────────────────────────────────────────────
-
     public function professor()
     {
         return $this->belongsTo(User::class, 'professor_id');
@@ -43,8 +41,6 @@ class Reserva extends Model
     {
         return $this->belongsTo(Equipamento::class);
     }
-
-    // ─── Scopes ───────────────────────────────────────────────────────────────
 
     public function scopePendentes($query)
     {
