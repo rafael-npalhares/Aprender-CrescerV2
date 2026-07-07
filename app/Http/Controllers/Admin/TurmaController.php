@@ -19,6 +19,18 @@ class TurmaController extends Controller
         return view('admin.turmas.create');
     }
 
+    public function show(Turma $turma)
+    {
+        $alunos = $turma->alunos()
+                         ->with('user')
+                         ->join('users', 'users.id', '=', 'alunos.user_id')
+                         ->orderBy('users.name')
+                         ->select('alunos.*')
+                         ->get();
+
+        return view('admin.turmas.show', compact('turma', 'alunos'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([

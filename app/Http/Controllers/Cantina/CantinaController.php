@@ -132,7 +132,7 @@ class CantinaController extends Controller
     {
         $pedidos = PedidoCantina::with(['usuario', 'itens.produto'])
             ->orderByDesc('created_at')->get();
-        return view('cantina.pedidos', compact('pedidos'));
+        return view('admin.cantina.pedidos', compact('pedidos'));
     }
 
     public function destroy(PedidoCantina $pedido)
@@ -218,16 +218,13 @@ class CantinaController extends Controller
         if (!Auth::user()->isAdmin() && $pedido->user_id !== Auth::id()) {
             abort(403, 'Ação não autorizada.');
         }
-        foreach ($pedido->itens as $item) {
-            $item->produto->increment('quantidade_estoque', $item->quantidade);
-        }
-        $pedido->update(['status' => 'cancelado']);
+        $pedido->cancelarPedido();
         return back()->with('sucesso', 'Pedido cancelado.');
     }
 
     public function entregar(PedidoCantina $pedido)
     {
-        $pedido->update(['status' => 'entregue']);
+        $pedido->marcarEntregue();
         return back()->with('sucesso', 'Pedido marcado como entregue!');
     }
 

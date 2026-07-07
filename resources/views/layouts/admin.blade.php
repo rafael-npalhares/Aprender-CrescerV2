@@ -443,6 +443,20 @@
                 <i class="bi bi-bag-fill"></i> Cantina
             </a></li>
 
+        @elseif(auth()->user()->isGerente())
+
+            <li><a href="{{ route('gerente.dashboard') }}"
+                   class="nav-link {{ request()->routeIs('gerente.dashboard') ? 'active' : '' }}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a></li>
+
+            <li class="sidebar-section">Cantina</li>
+
+            <li><a href="{{ route('gerente.pedidos.index') }}"
+                   class="nav-link {{ request()->routeIs('gerente.pedidos.*') ? 'active' : '' }}">
+                <i class="bi bi-bag-fill"></i> Pedidos
+            </a></li>
+
         @endif
 
     </ul>

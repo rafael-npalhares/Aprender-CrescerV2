@@ -40,6 +40,9 @@
                     </td>
                     <td>
                         <div style="display:flex; gap:6px;">
+                            <a href="{{ route('admin.turmas.show', $turma) }}"
+                               class="btn btn-primary btn-sm">Ver Alunos</a>
+
                             <a href="{{ route('admin.turmas.edit', $turma) }}"
                                class="btn btn-secondary btn-sm">Editar</a>
 

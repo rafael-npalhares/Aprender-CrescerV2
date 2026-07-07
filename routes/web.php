@@ -76,12 +76,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/cantina/produtos',                 [CantinaController::class, 'storeProduto'])  ->name('cantina.produtos.store');
     Route::get('/cantina/produtos/{produto}/editar', [CantinaController::class, 'editProduto'])   ->name('cantina.produtos.edit');
     Route::patch('/cantina/produtos/{produto}',      [CantinaController::class, 'updateProduto']) ->name('cantina.produtos.update');
-    Route::delete('/cantina/produtos/{produto}',     [CantinaController::class, 'destroyProduto'])->name('cantina.produtos.destroy');
+    Route::delete('/cantina/produtos/{produto}', [CantinaController::class, 'excluirProduto'])
+    ->name('cantina.produtos.destroy');
     Route::get('/cantina/pedidos',                   [CantinaController::class, 'pedidos'])       ->name('cantina.pedidos');
     Route::patch('/cantina/pedidos/{pedido}/cancelar',[CantinaController::class, 'cancelar'])     ->name('cantina.pedidos.cancelar');
     Route::delete('/cantina/pedidos/{pedido}',        [CantinaController::class, 'destroy'])      ->name('cantina.pedidos.destroy');
     Route::patch('cantina/produtos/{produto}/ativar', [CantinaController::class, 'ativarProduto'])
     ->name('cantina.produtos.ativar');
+    Route::patch('/cantina/produtos/{produto}/desativar', [CantinaController::class, 'desativarProduto'])
+    ->name('cantina.produtos.desativar');
     
     Route::post('/cantina/categorias',              [CantinaController::class, 'storeCategoria'])  ->name('cantina.categorias.store');
     Route::patch('/cantina/categorias/{categoria}', [CantinaController::class, 'updateCategoria']) ->name('cantina.categorias.update');

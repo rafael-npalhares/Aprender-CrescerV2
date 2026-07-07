@@ -50,8 +50,13 @@
                 {{-- Perfil --}}
                 <div class="form-group">
                     <label class="form-label">Perfil de acesso *</label>
-                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-                        @foreach(['admin' => ['🛡️','Admin','Acesso total ao sistema'], 'professor' => ['🧑‍🏫','Professor','Reservas e horários'], 'aluno' => ['🎒','Aluno','Avisos e biblioteca']] as $value => [$icon, $label, $desc])
+                    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px;">
+                        @foreach([
+                            'admin'     => ['🛡️', 'Admin', 'Acesso total ao sistema'],
+                            'professor' => ['🧑‍🏫', 'Professor', 'Reservas e horários'],
+                            'aluno'     => ['🎒', 'Aluno', 'Avisos e biblioteca'],
+                            'gerente'   => ['🍔', 'Gerente', 'Gerencia a cantina'],
+                        ] as $value => [$icon, $label, $desc])
                         <label class="role-card {{ old('role') === $value ? 'selected' : '' }}"
                                for="role_{{ $value }}"
                                style="border:2px solid var(--border-color);border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:all .2s;">

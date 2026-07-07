@@ -105,6 +105,7 @@
     .role-badge.admin     { background: #58a6ff22; color: #58a6ff; }
     .role-badge.professor { background: #bc8cff22; color: #bc8cff; }
     .role-badge.aluno     { background: #3fb95022; color: #3fb950; }
+    .role-badge.gerente   { background: #f0883e22; color: #f0883e; }
 
     /* matrícula */
     .matricula-tag {
@@ -177,6 +178,7 @@
         <option value="admin">Administrador</option>
         <option value="professor">Professor</option>
         <option value="aluno">Aluno</option>
+        <option value="gerente">Gerente</option>
     </select>
     <span class="count-badge" id="contagem">{{ $usuarios->count() }} exibidos</span>
 </div>
@@ -214,6 +216,7 @@
                         <span class="role-badge {{ $u->role }}">
                             @if($u->role === 'admin') Administrador
                             @elseif($u->role === 'professor') Professor
+                            @elseif($u->role === 'gerente') Gerente
                             @else Aluno
                             @endif
                         </span>

@@ -12,12 +12,12 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('livro_id')->constrained()->onDelete('cascade');
             $table->date('data_emprestimo');
-            // Preenchida automaticamente: data_emprestimo + 15 dias (no controller)
+       
             $table->date('data_prevista_devolucao');
-            // Preenchida quando o livro é fisicamente devolvido
+ 
             $table->date('data_devolucao')->nullable();
             $table->integer('renovacoes')->default(0);
-            // 'atrasado' marcado manualmente pelo admin
+    
             $table->enum('status', ['ativo', 'devolvido', 'atrasado'])->default('ativo');
             $table->timestamps();
         });

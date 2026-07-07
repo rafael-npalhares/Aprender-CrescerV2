@@ -30,7 +30,7 @@ class UsuarioController extends Controller
             'name'      => 'required|string|max:200',
             'email'     => 'required|email|unique:users,email',
             'password'  => 'required|min:8|confirmed',
-            'role'      => 'required|in:admin,professor,aluno',
+            'role'      => 'required|in:admin,professor,aluno,gerente',
             'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula',
             'turma_id'  => 'nullable|exists:turmas,id',
         ]);
@@ -54,6 +54,9 @@ class UsuarioController extends Controller
             ]);
         }
 
+        // 'gerente' não tem tabela de perfil própria — o campo role no
+        // próprio users já é suficiente para o middleware role:gerente.
+
         return redirect()->route('admin.usuarios.index')
                          ->with('sucesso', 'Usuário criado com sucesso!');
     }
@@ -69,7 +72,7 @@ class UsuarioController extends Controller
         $request->validate([
             'name'      => 'required|string|max:200',
             'email'     => 'required|email|unique:users,email,' . $usuario->id,
-            'role'      => 'required|in:admin,professor,aluno',
+            'role'      => 'required|in:admin,professor,aluno,gerente',
             'password'  => 'nullable|min:8|confirmed',
             'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula,' . optional($usuario->aluno)->id,
             'turma_id'  => 'nullable|exists:turmas,id',
@@ -94,6 +97,7 @@ class UsuarioController extends Controller
             if ($roleAnterior === 'aluno') {
                 $usuario->aluno?->delete();
             }
+            // 'gerente' e 'admin' não têm tabela de perfil própria, nada a remover
         }
 
         // Professor: cria perfil se não existir

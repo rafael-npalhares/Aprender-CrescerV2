@@ -61,6 +61,26 @@ class PedidoCantina extends Model
         return str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Cancela o pedido e devolve os itens ao estoque.
+     * Regra centralizada aqui para não duplicar entre CantinaController e GerenteController.
+     */
+    public function cancelarPedido(): void
+    {
+        foreach ($this->itens as $item) {
+            $item->produto->increment('quantidade_estoque', $item->quantidade);
+        }
+        $this->update(['status' => 'cancelado']);
+    }
+
+    /**
+     * Marca o pedido como entregue (retirado na cantina).
+     */
+    public function marcarEntregue(): void
+    {
+        $this->update(['status' => 'entregue']);
+    }
+
     public function scopePendentes($query)
     {
         return $query->where('status', 'pendente');

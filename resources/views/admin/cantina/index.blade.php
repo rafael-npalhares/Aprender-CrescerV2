@@ -170,7 +170,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <form action="{{ route('admin.cantina.categorias.update', $cat->id) }}" method="POST">
-                        @csrf @method('PUT')
+                        @csrf @method('PATCH')
                         <div class="modal-header">
                             <h5 class="modal-title">Editar categoria</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -271,11 +271,11 @@
                 </a>
 
                 @if($item->ativo)
-                    <form action="{{ route('admin.cantina.produtos.destroy', $item->id) }}"
-                          method="POST" onsubmit="return confirm('Desativar produto?')" style="flex:1;">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-outline-danger btn-sm w-100" title="Desativar">
-                            <i class="bi bi-trash"></i>
+                    <form action="{{ route('admin.cantina.produtos.desativar', $item->id) }}"
+                          method="POST" onsubmit="return confirm('Desativar este produto? Ele deixa de aparecer para compra, mas continua no histórico.')" style="flex:1;">
+                        @csrf @method('PATCH')
+                        <button class="btn btn-outline-warning btn-sm w-100" title="Desativar">
+                            <i class="bi bi-eye-slash"></i> Desativar
                         </button>
                     </form>
                 @else
@@ -283,10 +283,20 @@
                           method="POST" style="flex:1;">
                         @csrf @method('PATCH')
                         <button class="btn btn-outline-success btn-sm w-100" title="Reativar">
-                            <i class="bi bi-arrow-counterclockwise"></i>
+                            <i class="bi bi-arrow-counterclockwise"></i> Reativar
                         </button>
                     </form>
                 @endif
+            </div>
+
+            <div style="margin-top:.5rem;">
+                <form action="{{ route('admin.cantina.produtos.destroy', $item->id) }}"
+                      method="POST" onsubmit="return confirm('Excluir \'{{ addslashes($item->nome) }}\' PERMANENTEMENTE? Isso não pode ser desfeito.')">
+                    @csrf @method('DELETE')
+                    <button class="btn btn-outline-danger btn-sm w-100" title="Excluir permanentemente">
+                        <i class="bi bi-trash-fill"></i> Excluir permanentemente
+                    </button>
+                </form>
             </div>
         </div>
         @endforeach
