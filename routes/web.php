@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\ResetSenhaController;
 // Admin
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AvisoController;
@@ -29,6 +30,14 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
+
+// RECUPERAÇÃO DE SENHA (fluxo customizado: verificação por e-mail + nome)
+Route::middleware('guest')->group(function () {
+    Route::get('/esqueci-senha',        [ResetSenhaController::class, 'formulario'])   ->name('esqueci.senha.form');
+    Route::post('/verificar-usuario',   [ResetSenhaController::class, 'verificar'])    ->name('verificar.usuario');
+    Route::get('/nova-senha',           [ResetSenhaController::class, 'novaSenhaForm'])->name('nova.senha.form');
+    Route::post('/nova-senha',          [ResetSenhaController::class, 'salvar'])       ->name('nova.senha.salvar');
+});
 
 // ADMIN
 
@@ -75,7 +84,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/cantina/produtos',                 [CantinaController::class, 'storeProduto'])  ->name('cantina.produtos.store');
     Route::get('/cantina/produtos/{produto}/editar', [CantinaController::class, 'editProduto'])   ->name('cantina.produtos.edit');
     Route::patch('/cantina/produtos/{produto}',      [CantinaController::class, 'updateProduto']) ->name('cantina.produtos.update');
-    // ANTES apontava para 'destroyProduto' (método que não existe mais). Agora aponta para 'excluirProduto'.
     Route::delete('/cantina/produtos/{produto}',     [CantinaController::class, 'excluirProduto'])->name('cantina.produtos.destroy');
     Route::get('/cantina/pedidos',                   [CantinaController::class, 'pedidos'])       ->name('cantina.pedidos');
     Route::patch('/cantina/produtos/{produto}/desativar', [CantinaController::class, 'desativarProduto'])
