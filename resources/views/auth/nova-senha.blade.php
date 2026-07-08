@@ -1,10 +1,10 @@
-{{-- resources/views/auth/login.blade.php --}}
+{{-- resources/views/auth/nova-senha.blade.php --}}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Aprender & Crescer</title>
+    <title>Nova Senha — Aprender & Crescer</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -31,8 +31,6 @@
             display: flex;
             color: var(--text);
         }
-
-        /* ── LEFT PANEL ── */
         .panel-left {
             width: 420px;
             min-height: 100vh;
@@ -85,36 +83,23 @@
         }
         .panel-tagline p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
 
-        .panel-info { position: relative; z-index: 1; display: flex; flex-direction: column; gap: .75rem; }
-        .info-item {
+        .panel-steps { position: relative; z-index: 1; display: flex; flex-direction: column; gap: .75rem; }
+        .step-item {
             display: flex; align-items: center; gap: .75rem;
             background: rgba(255,255,255,.04);
             border: 1px solid var(--border);
             border-radius: 10px; padding: .7rem 1rem;
         }
-        .info-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--blue); flex-shrink: 0;
+        .step-item.done { border-color: rgba(63,185,80,.35); background: rgba(63,185,80,.06); }
+        .step-num {
+            width: 26px; height: 26px; border-radius: 50%;
+            background: var(--blue); color: #fff;
+            font-size: .75rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .info-item span { color: rgba(255,255,255,.65); font-size: .85rem; }
+        .step-item.done .step-num { background: #3fb950; }
+        .step-item span { color: rgba(255,255,255,.65); font-size: .85rem; }
 
-        .panel-credits {
-            position: relative; z-index: 1;
-            font-size: .72rem; color: var(--muted);
-            line-height: 1.6; letter-spacing: .01em;
-            border-top: 1px solid var(--border);
-            padding-top: 1rem;
-        }
-        .panel-credits .credits-label {
-            display: block;
-            font-size: .68rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: .06em;
-            color: rgba(255,255,255,.3);
-            margin-bottom: .35rem;
-        }
-        .panel-credits .credits-names { color: rgba(255,255,255,.55); }
-
-        /* ── RIGHT PANEL ── */
         .panel-right {
             flex: 1; display: flex;
             align-items: center; justify-content: center; padding: 2rem;
@@ -136,10 +121,10 @@
 
         .card-icon {
             width: 56px; height: 56px;
-            background: rgba(45,110,247,.15);
-            border: 1px solid rgba(45,110,247,.3);
+            background: rgba(63,185,80,.15);
+            border: 1px solid rgba(63,185,80,.3);
             border-radius: 16px; display: flex; align-items: center;
-            justify-content: center; font-size: 1.6rem; color: var(--blue);
+            justify-content: center; font-size: 1.6rem; color: #3fb950;
             margin-bottom: 1.25rem;
         }
 
@@ -162,8 +147,14 @@
             position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
             color: var(--muted); font-size: 1rem; pointer-events: none; z-index: 2;
         }
+        .toggle-senha {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: var(--muted); font-size: 1rem;
+            cursor: pointer; z-index: 2; padding: 0;
+        }
         .form-control {
             padding-left: 2.6rem !important;
+            padding-right: 2.6rem !important;
             height: 48px;
             border: 1.5px solid var(--border);
             border-radius: 10px; font-size: .92rem;
@@ -182,44 +173,30 @@
         .form-control.is-invalid { border-color: #ef4444; }
         .invalid-feedback { font-size: .8rem; color: #ef4444; }
 
-        .toggle-pw {
-            position: absolute; right: 12px; top: 50%;
-            transform: translateY(-50%);
-            border: none; background: none;
-            color: var(--muted); cursor: pointer; z-index: 2;
-            transition: color .15s;
+        .req-hint {
+            font-size: .76rem; color: var(--muted); margin: -0.9rem 0 1.25rem 0.2rem;
         }
-        .toggle-pw:hover { color: var(--blue); }
 
-        .remember-row {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 1.5rem;
-        }
-        .forgot-link {
-            text-decoration: none; color: var(--blue);
-            font-size: .85rem; font-weight: 600;
-            transition: opacity .15s;
-        }
-        .forgot-link:hover { opacity: .8; }
-
-        .btn-login {
-            width: 100%; height: 48px; background: var(--blue);
+        .btn-salvar {
+            width: 100%; height: 48px; background: #3fb950;
             color: #fff; border: none; border-radius: 10px;
             font-weight: 600; font-size: .95rem; letter-spacing: .02em;
             transition: background .2s, transform .15s; cursor: pointer;
         }
-        .btn-login:hover { background: #1e5ce6; transform: translateY(-1px); }
-        .btn-login:active { transform: translateY(0); }
+        .btn-salvar:hover { background: #34a745; transform: translateY(-1px); }
+        .btn-salvar:active { transform: translateY(0); }
+
+        .link-voltar {
+            display: block; text-align: center; font-size: .85rem;
+            color: var(--muted); margin-top: 1.25rem;
+            text-decoration: none; transition: color .15s;
+        }
+        .link-voltar:hover { color: var(--blue); }
 
         .alert-danger {
             background: rgba(239,68,68,.1);
             border: 1px solid rgba(239,68,68,.25);
             color: #f87171; border-radius: 10px; font-size: .85rem;
-        }
-        .alert-success {
-            background: rgba(34,197,94,.1);
-            border: 1px solid rgba(34,197,94,.25);
-            color: #4ade80; border-radius: 10px; font-size: .85rem;
         }
 
         @media (max-width: 768px) { .panel-left { display: none; } }
@@ -238,28 +215,23 @@
         </div>
 
         <div class="panel-tagline">
-            <h2>Bem-vindo ao sistema.</h2>
-            <p>Área destinada a alunos, professores e colaboradores. Faça login para acessar os recursos do sistema.</p>
+            <h2>Quase lá! Defina sua nova senha.</h2>
+            <p>Sua identidade já foi confirmada. Agora é só escolher uma nova senha para acessar o sistema.</p>
         </div>
 
-        <div class="panel-info" style="margin-bottom: 1.5rem;">
-            <div class="info-item">
-                <div class="info-dot"></div>
-                <span>Gestão de usuários e turmas</span>
+        <div class="panel-steps">
+            <div class="step-item done">
+                <div class="step-num"><i class="bi bi-check-lg"></i></div>
+                <span>Identidade verificada</span>
             </div>
-            <div class="info-item">
-                <div class="info-dot"></div>
-                <span>Reservas e horários integrados</span>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <span>Crie uma nova senha</span>
             </div>
-            <div class="info-item">
-                <div class="info-dot"></div>
-                <span>Biblioteca e cantina disponíveis</span>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <span>Acesse o sistema normalmente</span>
             </div>
-        </div>
-
-        <div class="panel-credits">
-            <span class="credits-label">Desenvolvido por</span>
-            <span class="credits-names">Tiago Marghotti, Rafael Nunes Palhares, Murilo de Camargo e Natan Henrique Passos</span>
         </div>
     </div>
 
@@ -271,75 +243,69 @@
                 <i class="bi bi-shield-lock"></i>
             </div>
 
-            <h3>Acessar sistema</h3>
-            <p class="subtitle">Informe suas credenciais para continuar.</p>
+            <h3>Criar nova senha</h3>
+            <p class="subtitle">
+                Escolha uma senha forte, com pelo menos 8 caracteres.
+            </p>
 
-            @if ($errors->any())
+            @if ($errors->has('geral'))
                 <div class="alert alert-danger py-2 mb-3">
                     <i class="bi bi-exclamation-circle me-2"></i>
-                    @foreach ($errors->all() as $error)
-                        {{ $error }}<br>
-                    @endforeach
+                    {{ $errors->first('geral') }}
                 </div>
             @endif
 
-            @if (session('status'))
-                <div class="alert alert-success py-2 mb-3">
-                    <i class="bi bi-check-circle me-2"></i>
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <form action="{{ route('login') }}" method="POST">
+            <form method="POST" action="{{ route('nova.senha.salvar') }}" novalidate>
                 @csrf
 
-                <label class="form-label">E-mail</label>
-                <div class="input-wrap">
-                    <i class="bi bi-envelope input-icon"></i>
-                    <input type="email" name="email"
-                           class="form-control @error('email') is-invalid @enderror"
-                           value="{{ old('email') }}"
-                           placeholder="seu@email.com"
-                           autofocus autocomplete="email">
-                    @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <label class="form-label">Senha</label>
+                <label class="form-label">Nova senha</label>
                 <div class="input-wrap">
                     <i class="bi bi-lock input-icon"></i>
-                    <input id="senha" type="password" name="password"
+                    <input type="password"
+                           name="password"
+                           id="password"
                            class="form-control @error('password') is-invalid @enderror"
-                           placeholder="••••••••"
-                           autocomplete="current-password">
-                    <button type="button" class="toggle-pw" onclick="toggleSenha()">
-                        <i class="bi bi-eye" id="icon-senha"></i>
+                           placeholder="Mínimo 8 caracteres"
+                           autofocus autocomplete="new-password">
+                    <button type="button" class="toggle-senha" onclick="toggleSenha('password','ico1')">
+                        <i class="bi bi-eye" id="ico1"></i>
                     </button>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="remember-row" style="justify-content: center;">
-                    <a href="{{ route('password.request') }}" class="forgot-link">
-                        Esqueci a senha
-                    </a>
+                <label class="form-label">Confirmar nova senha</label>
+                <div class="input-wrap">
+                    <i class="bi bi-lock-fill input-icon"></i>
+                    <input type="password"
+                           name="password_confirmation"
+                           id="password_confirmation"
+                           class="form-control"
+                           placeholder="Repita a senha"
+                           autocomplete="new-password">
+                    <button type="button" class="toggle-senha" onclick="toggleSenha('password_confirmation','ico2')">
+                        <i class="bi bi-eye" id="ico2"></i>
+                    </button>
                 </div>
 
-                <button type="submit" class="btn-login">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+                <button type="submit" class="btn-salvar">
+                    <i class="bi bi-check-circle me-2"></i>Salvar nova senha
                 </button>
             </form>
+
+            <a href="{{ route('login') }}" class="link-voltar">
+                <i class="bi bi-arrow-left me-1"></i>Voltar para o login
+            </a>
 
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function toggleSenha() {
-            const input = document.getElementById('senha');
-            const icon  = document.getElementById('icon-senha');
+        function toggleSenha(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon  = document.getElementById(iconId);
             if (input.type === 'password') {
                 input.type = 'text';
                 icon.className = 'bi bi-eye-slash';

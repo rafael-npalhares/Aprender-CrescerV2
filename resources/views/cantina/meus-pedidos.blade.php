@@ -110,7 +110,6 @@
 </div>
 @endforelse
 
-{{-- MODAL: confirmação recém feita --}}
 @if(session('pedidoConfirmado'))
 @php $pc = session('pedidoConfirmado'); @endphp
 <div class="modal fade" id="modalConfirmacao" tabindex="-1" data-bs-backdrop="static">

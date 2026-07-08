@@ -10,17 +10,13 @@ class ProdutoCantinaSeeder extends Seeder
 {
     public function run(): void
     {
-        // Limpa na ordem certa por causa das FKs
+
         ProdutoCantina::truncate();
         CategoriaCantina::truncate();
 
-        // ── Categorias ──
         $lanche = CategoriaCantina::create(['nome' => 'Lanche']);
         $bebida = CategoriaCantina::create(['nome' => 'Bebida']);
 
-        // ── Produtos ──
-        // As fotos ficam em public/img/cantina/
-        // Referenciadas via asset('img/cantina/nome-do-arquivo')
 
         $produtos = [
             [

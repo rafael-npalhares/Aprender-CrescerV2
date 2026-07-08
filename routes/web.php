@@ -30,9 +30,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
 
-// ─────────────────────────────────────────────────────────────────────────────
 // ADMIN
-// ─────────────────────────────────────────────────────────────────────────────
+
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
@@ -59,7 +58,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('/reservas/{reserva}/negar',         [ReservaAdminController::class, 'negar'])  ->name('reservas.negar');
     Route::delete('/reservas/{reserva}',              [ReservaAdminController::class, 'destroy'])->name('reservas.destroy');
 
-    // Biblioteca (gestão admin)
+    // Biblioteca 
     Route::get('/biblioteca',                              [BibliotecaController::class, 'index'])       ->name('biblioteca.index');
     Route::get('/biblioteca/livros/criar',                 [BibliotecaController::class, 'createLivro']) ->name('biblioteca.livros.create');
     Route::post('/biblioteca/livros',                      [BibliotecaController::class, 'storeLivro'])  ->name('biblioteca.livros.store');
@@ -70,30 +69,28 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('/biblioteca/emprestimos/{emp}/devolver', [BibliotecaController::class, 'devolver'])    ->name('biblioteca.devolver');
     Route::patch('/biblioteca/emprestimos/{emp}/atraso',   [BibliotecaController::class, 'marcarAtraso'])->name('biblioteca.atraso');
 
-    // Cantina (gestão admin: CRUD de produtos + visualizar/cancelar/deletar pedidos)
+    // Cantina 
     Route::get('/cantina',                           [CantinaController::class, 'adminIndex'])    ->name('cantina.index');
     Route::get('/cantina/produtos/criar',            [CantinaController::class, 'createProduto']) ->name('cantina.produtos.create');
     Route::post('/cantina/produtos',                 [CantinaController::class, 'storeProduto'])  ->name('cantina.produtos.store');
     Route::get('/cantina/produtos/{produto}/editar', [CantinaController::class, 'editProduto'])   ->name('cantina.produtos.edit');
     Route::patch('/cantina/produtos/{produto}',      [CantinaController::class, 'updateProduto']) ->name('cantina.produtos.update');
-    Route::delete('/cantina/produtos/{produto}', [CantinaController::class, 'excluirProduto'])
-    ->name('cantina.produtos.destroy');
+    // ANTES apontava para 'destroyProduto' (método que não existe mais). Agora aponta para 'excluirProduto'.
+    Route::delete('/cantina/produtos/{produto}',     [CantinaController::class, 'excluirProduto'])->name('cantina.produtos.destroy');
     Route::get('/cantina/pedidos',                   [CantinaController::class, 'pedidos'])       ->name('cantina.pedidos');
-    Route::patch('/cantina/pedidos/{pedido}/cancelar',[CantinaController::class, 'cancelar'])     ->name('cantina.pedidos.cancelar');
-    Route::delete('/cantina/pedidos/{pedido}',        [CantinaController::class, 'destroy'])      ->name('cantina.pedidos.destroy');
-    Route::patch('cantina/produtos/{produto}/ativar', [CantinaController::class, 'ativarProduto'])
-    ->name('cantina.produtos.ativar');
     Route::patch('/cantina/produtos/{produto}/desativar', [CantinaController::class, 'desativarProduto'])
     ->name('cantina.produtos.desativar');
-    
+    Route::patch('/cantina/produtos/{produto}/ativar', [CantinaController::class, 'ativarProduto'])
+    ->name('cantina.produtos.ativar');
+    Route::patch('/cantina/pedidos/{pedido}/cancelar',[CantinaController::class, 'cancelar'])     ->name('cantina.pedidos.cancelar');
+    Route::delete('/cantina/pedidos/{pedido}',        [CantinaController::class, 'destroy'])      ->name('cantina.pedidos.destroy');
     Route::post('/cantina/categorias',              [CantinaController::class, 'storeCategoria'])  ->name('cantina.categorias.store');
     Route::patch('/cantina/categorias/{categoria}', [CantinaController::class, 'updateCategoria']) ->name('cantina.categorias.update');
     Route::delete('/cantina/categorias/{categoria}',[CantinaController::class, 'destroyCategoria'])->name('cantina.categorias.destroy');
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+
 // PROFESSOR
-// ─────────────────────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'role:professor'])->prefix('professor')->name('professor.')->group(function () {
 
     Route::get('/dashboard', [ProfessorController::class, 'index'])->name('dashboard');
@@ -104,9 +101,9 @@ Route::middleware(['auth', 'role:professor'])->prefix('professor')->name('profes
         ->only(['index', 'create', 'store', 'destroy']);
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+
 // ALUNO
-// ─────────────────────────────────────────────────────────────────────────────
+
 Route::middleware(['auth', 'role:aluno'])->prefix('aluno')->name('aluno.')->group(function () {
 
     Route::get('/dashboard', [AlunoController::class, 'index'])->name('dashboard');
@@ -114,9 +111,8 @@ Route::middleware(['auth', 'role:aluno'])->prefix('aluno')->name('aluno.')->grou
     Route::get('/horarios',  [AlunoController::class, 'horarios'])->name('horarios');
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
 // COMPARTILHADAS (aluno + professor — protegidas apenas por auth)
-// ─────────────────────────────────────────────────────────────────────────────
+
 Route::middleware('auth')->group(function () {
 
     // Biblioteca
@@ -139,9 +135,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+
 // GERENTE (acesso exclusivo à cantina)
-// ─────────────────────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'role:gerente'])->prefix('gerente')->name('gerente.')->group(function () {
     Route::get('/dashboard',                    [GerenteController::class, 'index'])    ->name('dashboard');
     Route::get('/pedidos',                      [GerenteController::class, 'pedidos'])  ->name('pedidos.index');

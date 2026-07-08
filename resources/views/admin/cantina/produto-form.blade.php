@@ -40,7 +40,6 @@
     margin-bottom: 1.25rem;
 }
 
-/* campos */
 .field-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.1rem; }
 .field-group:last-child { margin-bottom: 0; }
 .field-lbl {
@@ -62,7 +61,6 @@
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 @media(max-width:540px){ .field-row { grid-template-columns: 1fr; } }
 
-/* upload de foto */
 .foto-upload-area {
     border: 2px dashed var(--border-color); border-radius: 12px;
     padding: 1.5rem; text-align: center; cursor: pointer;
@@ -79,7 +77,6 @@
 .foto-upload-label { font-size: .85rem; font-weight: 600; color: var(--text-main); margin-bottom: .25rem; }
 .foto-upload-sub   { font-size: .75rem; color: var(--text-secondary); }
 
-/* preview */
 .foto-preview-wrap {
     display: none; position: relative;
     border-radius: 12px; overflow: hidden;
@@ -97,7 +94,6 @@
 }
 .foto-preview-remove:hover { background: rgba(248,81,73,.8); }
 
-/* foto atual (edição) */
 .foto-atual {
     border-radius: 12px; overflow: hidden;
     border: 1.5px solid var(--border-color); margin-bottom: 1rem;
@@ -107,8 +103,6 @@
     padding: .5rem .85rem; font-size: .72rem; color: var(--text-secondary);
     background: var(--hover-bg); display: flex; align-items: center; gap: .4rem;
 }
-
-/* estoque visual */
 .estoque-preview {
     display: inline-flex; align-items: center; gap: .5rem;
     margin-top: .5rem; font-size: .78rem; color: var(--text-secondary);
@@ -118,7 +112,6 @@
     transition: background .3s;
 }
 
-/* rodapé de ações */
 .pf-footer {
     display: flex; align-items: center; justify-content: flex-end; gap: .75rem;
     padding: 1.25rem 1.75rem;
@@ -225,7 +218,7 @@
             {{-- Foto atual (só na edição) --}}
             @if($editando && $produto->foto)
                 <div class="foto-atual">
-                    <img src="{{ asset('storage/' . $produto->foto) }}"
+                    <img src="{{ $produto->foto_url }}"
                          alt="{{ $produto->nome }}" id="fotoAtualImg">
                     <div class="foto-atual-label">
                         <i class="bi bi-image"></i>
@@ -255,9 +248,7 @@
             <div class="field-hint" style="margin-top:.65rem;">
                 <i class="bi bi-info-circle me-1"></i>
                 A imagem é salva automaticamente em
-                <code style="color:var(--blue-primary);">storage/app/public/cantina/</code>
-                e acessível via <code style="color:var(--blue-primary);">public/storage/cantina/</code>.
-                Certifique-se de ter rodado <code>php artisan storage:link</code>.
+                <code style="color:var(--blue-primary);">public/img/cantina/</code>.
             </div>
         </div>
 
@@ -278,13 +269,11 @@
 
 @push('scripts')
 <script>
-// ── Preview da imagem antes de enviar ────────────────────────────────────────
 function previewFoto(input) {
     if (!input.files || !input.files[0]) return;
 
     const file = input.files[0];
 
-    // Valida tamanho (2MB)
     if (file.size > 2 * 1024 * 1024) {
         alert('A imagem não pode ultrapassar 2MB.');
         input.value = '';
@@ -297,25 +286,21 @@ function previewFoto(input) {
         document.getElementById('fotoPreviewWrap').style.display = 'block';
         document.getElementById('fotoUploadArea').style.display  = 'none';
 
-        // Oculta foto atual se existir
         const atual = document.getElementById('fotoAtualImg');
         if (atual) atual.closest('.foto-atual').style.display = 'none';
     };
     reader.readAsDataURL(file);
 }
-
-// ── Remove a seleção e volta para a área de upload ───────────────────────────
 function removerFoto() {
     document.getElementById('fotoInput').value = '';
     document.getElementById('fotoPreviewWrap').style.display = 'none';
     document.getElementById('fotoUploadArea').style.display  = '';
 
-    // Restaura foto atual se existir
+
     const atual = document.getElementById('fotoAtualImg');
     if (atual) atual.closest('.foto-atual').style.display = '';
 }
 
-// ── Indicador visual de estoque ──────────────────────────────────────────────
 function atualizarEstoquePreview(valor) {
     const dot   = document.getElementById('estoqueDot');
     const label = document.getElementById('estoqueLabel');
@@ -339,7 +324,6 @@ function atualizarEstoquePreview(valor) {
     }
 }
 
-// Inicializa o preview de estoque se estiver editando
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('qtdEstoque');
     if (input && input.value !== '') atualizarEstoquePreview(input.value);

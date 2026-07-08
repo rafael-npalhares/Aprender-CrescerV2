@@ -54,7 +54,7 @@
         padding: .18rem .55rem; border-radius: 6px;
     }
 
-    /* Empty */
+
     .av-empty {
         background: var(--card-bg); border: 1px solid var(--border-color);
         border-radius: 12px; padding: 4rem 1rem;

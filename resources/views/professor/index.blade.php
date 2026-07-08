@@ -75,7 +75,7 @@
 
 @push('styles')
 <style>
-    /* Responsividade da tabela em telas pequenas */
+
     @media (max-width: 767.98px) {
         .table-responsive table thead {
             display: none;

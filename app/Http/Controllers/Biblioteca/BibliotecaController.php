@@ -71,27 +71,37 @@ class BibliotecaController extends Controller
     }
 
     public function devolver(Emprestimo $emp)
-{
-    
-    $emp->update([
-        'status'         => 'devolvido',
-        'data_devolucao' => now(),
-    ]);
+    {
+        $emp->update([
+            'status'         => 'devolvido',
+            'data_devolucao' => now(),
+        ]);
 
-    $emp->livro->increment('qtd_disponivel');
+        $emp->livro->increment('qtd_disponivel');
 
-    return back()->with('sucesso', 'Livro devolvido!');
-}
+        return back()->with('sucesso', 'Livro devolvido!');
+    }
 
-   public function meusEmprestimos()
-{
-    $emprestimos = Emprestimo::where('user_id', auth()->id())
-                             ->with('livro')
-                             ->latest()
-                             ->paginate(10);
+    public function marcarAtraso(Emprestimo $emp)
+    {
+        if ($emp->status === 'devolvido') {
+            return back()->with('erro', 'Este empréstimo já foi devolvido, não é possível marcar como atrasado.');
+        }
 
-    return view('biblioteca.emprestimos', compact('emprestimos'));
-}
+        $emp->update(['status' => 'atrasado']);
+
+        return back()->with('sucesso', 'Empréstimo marcado como atrasado.');
+    }
+
+    public function meusEmprestimos()
+    {
+        $emprestimos = Emprestimo::where('user_id', auth()->id())
+                                 ->with('livro')
+                                 ->latest()
+                                 ->paginate(10);
+
+        return view('biblioteca.emprestimos', compact('emprestimos'));
+    }
 
     public function createLivro()
     {
@@ -160,17 +170,17 @@ class BibliotecaController extends Controller
     }
     
     public function showLivro(Livro $livro)
-{
-    $emprestimosAtivos = collect();
+    {
+        $emprestimosAtivos = collect();
 
-    if (auth()->user()->isAdmin()) {
-        $emprestimosAtivos = Emprestimo::where('livro_id', $livro->id)
-                                       ->where('status', '!=', 'devolvido')
-                                       ->with('usuario')
-                                       ->latest()
-                                       ->get();
+        if (auth()->user()->isAdmin()) {
+            $emprestimosAtivos = Emprestimo::where('livro_id', $livro->id)
+                                           ->where('status', '!=', 'devolvido')
+                                           ->with('usuario')
+                                           ->latest()
+                                           ->get();
+        }
+
+        return view('biblioteca.show', compact('livro', 'emprestimosAtivos'));
     }
-
-    return view('biblioteca.show', compact('livro', 'emprestimosAtivos'));
-}
 }

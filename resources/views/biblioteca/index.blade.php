@@ -170,7 +170,7 @@
                             <i class="bi bi-pencil-fill"></i> Editar
                         </a>
                         <form action="{{ route('admin.biblioteca.livros.destroy', $livro) }}" method="POST"
-                              onsubmit="return confirm('Remover {{ addslashes($livro->titulo) }}?')" style="flex-shrink:0;">
+                              onsubmit="return confirmarAcao(this, 'Tem certeza que deseja remover \'{{ addslashes($livro->titulo) }}\'? Esta ação não pode ser desfeita.', 'Remover livro')" style="flex-shrink:0;">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn-emprestar" style="background:var(--badge-red);width:42px;">
                                 <i class="bi bi-trash3-fill"></i>

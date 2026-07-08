@@ -64,7 +64,7 @@
 
                             <form action="{{ route('admin.reservas.destroy', $reserva) }}"
                                   method="POST"
-                                  onsubmit="return confirm('Excluir esta reserva?')">
+                                  onsubmit="return confirmarAcao(this, 'Tem certeza que deseja excluir esta reserva? Esta ação não pode ser desfeita.', 'Excluir reserva')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Excluir</button>

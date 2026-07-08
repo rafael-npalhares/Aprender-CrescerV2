@@ -21,7 +21,6 @@
     .hr-header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin: 0; }
     .hr-header p  { font-size: .85rem; color: var(--text-secondary); margin: .25rem 0 0; }
 
-    /* Badge da turma */
     .hr-turma-badge {
         display: inline-flex; align-items: center; gap: .5rem;
         background: var(--hover-bg); border: 1px solid var(--border-color);
@@ -31,10 +30,7 @@
     }
     .hr-turma-badge strong { color: var(--text-main); }
 
-    /* Wrapper scroll horizontal em telas pequenas */
     .hr-scroll { overflow-x: auto; }
-
-    /* Tabela da grade */
     .hr-table {
         width: 100%; border-collapse: collapse;
         background: var(--card-bg);
@@ -64,14 +60,11 @@
     }
     .hr-table td:last-child { border-right: none; }
 
-    /* Número da aula */
     .hr-aula-num {
         font-size: .8rem; font-weight: 700;
         color: var(--text-secondary); text-align: left;
         white-space: nowrap;
     }
-
-    /* Célula com aula */
     .hr-cell {
         background: rgba(88,166,255,.08);
         border-radius: 8px; padding: .55rem .7rem;
@@ -86,12 +79,10 @@
         font-size: .75rem; color: var(--text-secondary);
     }
 
-    /* Célula vazia */
     .hr-cell-livre {
         font-size: .78rem; color: var(--border-color);
     }
 
-    /* Empty state */
     .hr-empty {
         background: var(--card-bg); border: 1px solid var(--border-color);
         border-radius: 12px; padding: 4rem 1rem;

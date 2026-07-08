@@ -83,12 +83,12 @@
                 <span class="pedido-total">Total: R$ {{ number_format($total, 2, ',', '.') }}</span>
                 <div style="display:flex; gap:6px;">
                     <form action="{{ route('gerente.pedidos.entregar', $pedido) }}" method="POST"
-                          onsubmit="return confirm('Confirmar entrega do pedido {{ $pedido->numero_formatado }}? Verifique se a senha informada pelo cliente é {{ $pedido->senha_retirada }}.')">
+                          onsubmit="return confirmarAcao(this, 'Verifique se a senha informada pelo cliente é {{ $pedido->senha_retirada }}. Confirmar entrega do pedido {{ $pedido->numero_formatado }}?', 'Confirmar entrega')">
                         @csrf @method('PATCH')
                         <button class="btn btn-primary btn-sm"><i class="bi bi-check-lg"></i> Confirmar entrega</button>
                     </form>
                     <form action="{{ route('gerente.pedidos.cancelar', $pedido) }}" method="POST"
-                          onsubmit="return confirm('Cancelar este pedido?')">
+                          onsubmit="return confirmarAcao(this, 'Tem certeza que deseja cancelar este pedido? O estoque dos produtos será restaurado.', 'Cancelar pedido')">
                         @csrf @method('PATCH')
                         <button class="btn btn-outline-danger btn-sm"><i class="bi bi-x-lg"></i> Cancelar</button>
                     </form>

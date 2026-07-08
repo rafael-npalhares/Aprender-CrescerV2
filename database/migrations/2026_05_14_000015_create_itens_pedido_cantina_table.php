@@ -7,13 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        // Cada linha = um produto dentro de um pedido (carrinho)
         Schema::create('itens_pedido_cantina', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pedido_id')->constrained('pedidos_cantina')->onDelete('cascade');
             $table->foreignId('produto_id')->constrained('produtos_cantina')->onDelete('restrict');
             $table->integer('quantidade')->default(1);
-            // Preço gravado no momento do pedido — protege histórico contra edições futuras no produto
             $table->decimal('preco_unitario', 8, 2);
             $table->timestamps();
         });

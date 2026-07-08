@@ -11,7 +11,6 @@
     .pd-header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin: 0; }
     .pd-header p  { font-size: .85rem; color: var(--text-secondary); margin: .25rem 0 0; }
 
-    /* Atalhos */
     .pd-shortcuts {
         display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
         margin-bottom: 2rem;
@@ -25,7 +24,6 @@
     .pd-shortcut i { font-size: 1.6rem; color: var(--blue-primary); display: block; margin-bottom: .5rem; }
     .pd-shortcut span { font-size: .85rem; font-weight: 600; color: var(--text-main); }
 
-    /* Grid principal */
     .pd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 
     .pd-box {

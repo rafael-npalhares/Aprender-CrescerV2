@@ -12,7 +12,6 @@ class AlunoSeeder extends Seeder
 {
     public function run(): void
     {
-        // Busca turmas já criadas pelo TurmaSeeder
         $turma1A = Turma::where('serie', '1')->where('turma', 'A')->first();
         $turma1B = Turma::where('serie', '1')->where('turma', 'B')->first();
         $turma2A = Turma::where('serie', '2')->where('turma', 'A')->first();
@@ -37,7 +36,6 @@ class AlunoSeeder extends Seeder
                 'role'     => 'aluno',
             ]);
 
-            // Formato: AP + ano + sequencial com 4 dígitos → AP20260001
             $ano       = date('Y');
             $sequencia = Aluno::count() + 1;
             $matricula = 'AP' . $ano . str_pad($sequencia, 4, '0', STR_PAD_LEFT);

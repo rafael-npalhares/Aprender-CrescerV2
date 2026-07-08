@@ -64,12 +64,12 @@
                     <td>
                         <div style="display:flex; gap:6px;">
                             <form action="{{ route('gerente.pedidos.entregar', $pedido) }}" method="POST"
-                                  onsubmit="return confirm('Confirmar entrega do pedido {{ $pedido->numero_formatado }}?')">
+                                  onsubmit="return confirmarAcao(this, 'Confirmar entrega do pedido {{ $pedido->numero_formatado }}?', 'Confirmar entrega')">
                                 @csrf @method('PATCH')
                                 <button class="btn btn-primary btn-sm">Entregar</button>
                             </form>
                             <form action="{{ route('gerente.pedidos.cancelar', $pedido) }}" method="POST"
-                                  onsubmit="return confirm('Cancelar o pedido {{ $pedido->numero_formatado }}?')">
+                                  onsubmit="return confirmarAcao(this, 'Tem certeza que deseja cancelar o pedido {{ $pedido->numero_formatado }}? O estoque dos produtos será restaurado.', 'Cancelar pedido')">
                                 @csrf @method('PATCH')
                                 <button class="btn btn-danger btn-sm">Cancelar</button>
                             </form>

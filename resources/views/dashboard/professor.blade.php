@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-    /* ── Card de perfil ── */
+
     .perfil-card {
         background: var(--card-bg); border: 1px solid var(--border-color);
         border-radius: 16px; padding: 2rem; margin-bottom: 1.75rem;
@@ -29,7 +29,7 @@
         font-size: .92rem; font-weight: 600; color: var(--text-main);
     }
 
-    /* ── Cards de resumo ── */
+
     .stats-grid {
         display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 1.25rem; margin-bottom: 1.75rem;
@@ -51,13 +51,13 @@
     .stat-value { font-size: 1.4rem; font-weight: 700; color: var(--text-main); line-height: 1; }
     .stat-label { font-size: .8rem; color: var(--text-secondary); margin-top: .25rem; }
 
-    /* ── Seções de conteúdo ── */
+
     .section-title {
         font-size: 1.05rem; font-weight: 700; color: var(--text-main);
         margin: 0 0 1rem; display: flex; align-items: center; gap: .5rem;
     }
 
-    /* Avisos */
+
     .aviso-item {
         background: var(--card-bg); border: 1px solid var(--border-color);
         border-left: 3px solid var(--blue-primary);
@@ -67,7 +67,6 @@
     .aviso-item p  { font-size: .82rem; color: var(--text-secondary); margin: 0; line-height: 1.5; }
     .aviso-item .data { font-size: .72rem; color: var(--text-secondary); margin-top: .5rem; display: block; }
 
-    /* Reservas */
     .reserva-item {
         display: flex; align-items: center; justify-content: space-between;
         background: var(--card-bg); border: 1px solid var(--border-color);
@@ -85,7 +84,6 @@
     .rv-badge.aprovada { background: rgba(63,185,80,.14);  color: #3fb950; }
     .rv-badge.negada   { background: rgba(248,81,73,.14);  color: #f85149; }
 
-    /* Atalhos */
     .quick-links { display: flex; gap: .65rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
     .quick-link {
         display: inline-flex; align-items: center; gap: .4rem;
@@ -100,7 +98,7 @@
 
 @section('conteudo')
 
-{{-- ── Card de Perfil ── --}}
+
 <div class="perfil-card">
     <div class="perfil-avatar">
         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
@@ -127,7 +125,6 @@
     </div>
 </div>
 
-{{-- ── Cards de Resumo ── --}}
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-icon blue"><i class="bi bi-calendar-check-fill"></i></div>
@@ -159,7 +156,6 @@
     </div>
 </div>
 
-{{-- ── Atalhos Rápidos ── --}}
 <div class="quick-links">
     <a href="{{ route('professor.reservas.create') }}" class="quick-link">
         <i class="bi bi-plus-lg"></i> Nova Reserva
@@ -181,10 +177,10 @@
     </a>
 </div>
 
-{{-- ── Conteúdo Principal ── --}}
+
 <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:1.5rem;">
 
-    {{-- Avisos recentes --}}
+
     <div>
         <div class="section-title">
             <i class="bi bi-megaphone-fill" style="color:var(--blue-primary);"></i>
@@ -221,7 +217,7 @@
         @endif
     </div>
 
-    {{-- Minhas reservas --}}
+
     <div>
         <div class="section-title">
             <i class="bi bi-calendar-check-fill" style="color:var(--badge-blue);"></i>

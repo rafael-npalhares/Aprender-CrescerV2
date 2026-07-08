@@ -55,12 +55,12 @@
 @if($pedido->status === 'pendente')
 <div style="display:flex; gap:8px; margin-top:1.25rem;">
     <form action="{{ route('gerente.pedidos.entregar', $pedido) }}" method="POST"
-          onsubmit="return confirm('Confirmar entrega do pedido {{ $pedido->numero_formatado }}?')">
+          onsubmit="return confirmarAcao(this, 'Confirmar entrega do pedido {{ $pedido->numero_formatado }}?', 'Confirmar entrega')">
         @csrf @method('PATCH')
         <button class="btn btn-primary">Confirmar entrega</button>
     </form>
     <form action="{{ route('gerente.pedidos.cancelar', $pedido) }}" method="POST"
-          onsubmit="return confirm('Cancelar este pedido?')">
+          onsubmit="return confirmarAcao(this, 'Tem certeza que deseja cancelar este pedido? O estoque dos produtos será restaurado.', 'Cancelar pedido')">
         @csrf @method('PATCH')
         <button class="btn btn-outline-danger">Cancelar</button>
     </form>

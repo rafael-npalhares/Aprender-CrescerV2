@@ -122,19 +122,6 @@
     </div>
 </div>
 
-@if(session('sucesso'))
-    <div class="alert alert-success alert-dismissible fade show mb-3">
-        <i class="bi bi-check-circle-fill me-2"></i>{{ session('sucesso') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-@endif
-@if(session('erro'))
-    <div class="alert alert-danger alert-dismissible fade show mb-3">
-        <i class="bi bi-exclamation-circle-fill me-2"></i>{{ session('erro') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-@endif
-
 {{-- ── PAINEL: GERENCIAR CATEGORIAS ── --}}
 <div class="cat-panel">
     <div class="cat-panel-header">

@@ -243,7 +243,7 @@
 
                             <form action="{{ route('admin.usuarios.destroy', $u->id) }}"
                                   method="POST"
-                                  onsubmit="return confirm('Remover {{ addslashes($u->name) }}? Esta ação não pode ser desfeita.')">
+                                  onsubmit="return confirmarAcao(this, 'Tem certeza que deseja remover {{ addslashes($u->name) }}? Esta ação não pode ser desfeita.', 'Remover usuário')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn-action btn-delete" title="Remover">
                                     <i class="bi bi-trash3-fill"></i>

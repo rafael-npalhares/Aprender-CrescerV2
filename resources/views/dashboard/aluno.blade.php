@@ -71,7 +71,6 @@
     .emprestimo-item .titulo { font-weight: 600; font-size: .88rem; color: var(--text-main); }
     .emprestimo-item .autor  { font-size: .78rem; color: var(--text-secondary); }
 
-    /* ── MODAL DE AVISOS FIXADOS ── */
     #modalAvisos .modal-header { border-bottom: 1px solid var(--border-color); }
     #modalAvisos .aviso-modal-item {
         border-left: 3px solid var(--blue-primary);
@@ -86,7 +85,7 @@
 
 @section('conteudo')
 
-{{-- ── CARD DE PERFIL ── --}}
+
 <div class="perfil-card">
     <div class="perfil-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
     <div class="perfil-info">
@@ -114,7 +113,7 @@
     </div>
 </div>
 
-{{-- ── CARDS DE RESUMO ── --}}
+
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-icon blue"><i class="bi bi-megaphone-fill"></i></div>
@@ -141,7 +140,7 @@
 
 <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:1.5rem;">
 
-    {{-- ── AVISOS RECENTES ── --}}
+  
     <div>
         <div class="section-title"><i class="bi bi-megaphone-fill" style="color:var(--blue-primary);"></i> Avisos recentes</div>
 
@@ -159,7 +158,7 @@
         @endforelse
     </div>
 
-    {{-- ── MEUS EMPRÉSTIMOS ── --}}
+
     <div>
         <div class="section-title"><i class="bi bi-journal-bookmark-fill" style="color:var(--badge-green);"></i> Meus empréstimos</div>
 
@@ -185,7 +184,7 @@
 
 </div>
 
-{{-- ── MODAL DE AVISOS FIXADOS ── --}}
+
 @if($avisosFixados->isNotEmpty())
 <div class="modal fade" id="modalAvisos" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

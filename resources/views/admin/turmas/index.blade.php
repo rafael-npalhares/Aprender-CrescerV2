@@ -48,7 +48,7 @@
 
                             <form action="{{ route('admin.turmas.destroy', $turma) }}"
                                   method="POST"
-                                  onsubmit="return confirm('Excluir a turma {{ $turma->serie }}º {{ $turma->turma }}?')">
+                                  onsubmit="return confirmarAcao(this, 'Tem certeza que deseja excluir a turma {{ $turma->serie }}º {{ $turma->turma }}? Esta ação não pode ser desfeita.', 'Excluir turma')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Excluir</button>

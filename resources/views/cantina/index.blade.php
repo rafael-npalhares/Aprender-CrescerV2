@@ -188,7 +188,6 @@
 </div>
 @endforelse
 
-{{-- CARRINHO FLUTUANTE --}}
 <div class="cart-bar" id="cartBar">
     <span class="cart-bar-count" id="cartCount">0 itens</span>
     <span class="cart-bar-total" id="cartTotal">R$ 0,00</span>

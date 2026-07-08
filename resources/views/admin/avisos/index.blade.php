@@ -73,7 +73,7 @@
                 <a href="{{ route('admin.avisos.edit', $aviso) }}" class="btn btn-secondary btn-sm">✏️ Editar</a>
 
                 <form action="{{ route('admin.avisos.destroy', $aviso) }}" method="POST"
-                      onsubmit="return confirm('Excluir o aviso \'{{ addslashes($aviso->titulo) }}\'?')">
+                      onsubmit="return confirmarAcao(this, 'Excluir o aviso \'{{ addslashes($aviso->titulo) }}\'? Esta ação não pode ser desfeita.', 'Excluir aviso')">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger btn-sm" style="width:100%;">🗑️ Excluir</button>

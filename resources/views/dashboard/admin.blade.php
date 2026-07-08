@@ -13,7 +13,6 @@
         color: #e6edf3;
     }
 
-    /* ── override do layout pai ── */
     #main-content { background: #0d1117; padding: 2rem 2rem 3rem; }
     #topbar {
         background: #161b22;
@@ -25,7 +24,6 @@
     #sidebar .nav-link { color: rgba(230,237,243,.55); }
     #sidebar .nav-link:hover, #sidebar .nav-link.active { background: #1f6feb22; color: #58a6ff; }
 
-    /* ── cabeçalho da página ── */
     .dash-header {
         display: flex;
         align-items: flex-end;
@@ -57,7 +55,6 @@
         padding: .4rem .9rem;
     }
 
-    /* ── grade de stat cards ── */
     .stat-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -126,7 +123,6 @@
     .stat-card .trend.warn { color: #d29922; }
     .stat-card .trend.down { color: #f85149; }
 
-    /* ── linha central ── */
     .mid-grid {
         display: grid;
         grid-template-columns: 1fr 380px;
@@ -135,7 +131,6 @@
     }
     @media(max-width:1000px){ .mid-grid { grid-template-columns: 1fr; } }
 
-    /* ── painéis genéricos ── */
     .panel {
         background: #161b22;
         border: 1px solid #21262d;
@@ -168,7 +163,6 @@
     .panel-head a:hover { opacity: 1; }
     .panel-body { padding: 1.2rem 1.4rem; }
 
-    /* ── tabela de reservas ── */
     .res-table { width: 100%; border-collapse: collapse; }
     .res-table th {
         font-size: .7rem;
@@ -218,7 +212,6 @@
         margin-right: .4rem;
     }
 
-    /* ── avisos ── */
     .aviso-item {
         display: flex;
         align-items: flex-start;
@@ -248,7 +241,7 @@
     .aviso-badge.alunos     { background: #3fb95022; color: #3fb950; }
     .aviso-badge.professores{ background: #bc8cff22; color: #bc8cff; }
 
-    /* ── linha inferior ── */
+    
     .bot-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -256,7 +249,7 @@
     }
     @media(max-width:800px){ .bot-grid { grid-template-columns: 1fr; } }
 
-    /* ── ações rápidas ── */
+
     .quick-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -289,7 +282,7 @@
         color: #e6edf3;
     }
 
-    /* ── mini progress bar ── */
+
     .progress-list { display: flex; flex-direction: column; gap: .9rem; }
     .prog-item {}
     .prog-header { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .35rem; }
@@ -306,7 +299,7 @@
         transition: width .6s cubic-bezier(.4,0,.2,1);
     }
 
-    /* ── animações ── */
+
     @keyframes fadeUp {
         from { opacity: 0; transform: translateY(16px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -325,7 +318,6 @@
 
 @section('conteudo')
 
-{{-- ── CABEÇALHO ── --}}
 <div class="dash-header">
     <div>
         <h1>Olá, <span>{{ explode(' ', auth()->user()->name)[0] }}</span> 👋</h1>
@@ -337,7 +329,6 @@
     </div>
 </div>
 
-{{-- ── STAT CARDS — linha 1 ── --}}
 <div class="stat-grid">
 
     <div class="stat-card" style="--accent:#58a6ff">
@@ -370,7 +361,6 @@
 
 </div>
 
-{{-- ── STAT CARDS — linha 2 ── --}}
 <div class="stat-grid" style="margin-bottom:1.5rem">
 
     <div class="stat-card" style="--accent:#f85149">
@@ -413,7 +403,6 @@
 
 </div>
 
-{{-- ── LINHA CENTRAL: tabela + avisos ── --}}
 <div class="mid-grid">
 
     {{-- tabela de reservas --}}
@@ -489,7 +478,7 @@
         </div>
     </div>
 
-    {{-- avisos recentes --}}
+
     <div class="panel">
         <div class="panel-head">
             <h2><i class="bi bi-megaphone-fill"></i> Últimos Avisos</h2>
@@ -535,7 +524,7 @@
 
 </div>
 
-{{-- ── LINHA INFERIOR: ações rápidas + ocupação ── --}}
+
 <div class="bot-grid">
 
     {{-- ações rápidas --}}
@@ -566,8 +555,6 @@
             </div>
         </div>
     </div>
-
-    {{-- ocupação do sistema --}}
     <div class="panel">
         <div class="panel-head">
             <h2><i class="bi bi-bar-chart-fill"></i> Ocupação do Sistema</h2>

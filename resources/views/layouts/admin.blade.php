@@ -507,7 +507,50 @@
     @yield('conteudo')
 </div>
 
+{{-- MODAL DE CONFIRMAÇÃO GLOBAL — substitui os confirm() nativos do navegador em todo o sistema --}}
+<div class="modal fade" id="modalConfirmacaoGlobal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalConfirmacaoTitulo">Confirmar ação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modalConfirmacaoMensagem" class="mb-0">Tem certeza que deseja realizar esta ação?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="modalConfirmacaoBotaoOk">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let formPendenteConfirmacao = null;
+
+    /**
+     * Substitui o confirm() nativo do navegador por um modal do próprio sistema.
+     * Uso em qualquer <form>: onsubmit="return confirmarAcao(this, 'Mensagem?', 'Título opcional')"
+     * Retorna false sempre, impedindo o submit imediato; o form só é enviado se o usuário
+     * clicar em "Confirmar" dentro do modal.
+     */
+    function confirmarAcao(form, mensagem, titulo = 'Confirmar ação') {
+        formPendenteConfirmacao = form;
+        document.getElementById('modalConfirmacaoTitulo').textContent = titulo;
+        document.getElementById('modalConfirmacaoMensagem').textContent = mensagem;
+        new bootstrap.Modal(document.getElementById('modalConfirmacaoGlobal')).show();
+        return false;
+    }
+
+    document.getElementById('modalConfirmacaoBotaoOk').addEventListener('click', function () {
+        if (formPendenteConfirmacao) {
+            formPendenteConfirmacao.submit();
+            formPendenteConfirmacao = null;
+        }
+    });
+</script>
 @stack('scripts')
 </body>
 </html>

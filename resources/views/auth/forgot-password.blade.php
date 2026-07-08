@@ -31,8 +31,6 @@
             display: flex;
             color: var(--text);
         }
-
-        /* ── LEFT PANEL ── */
         .panel-left {
             width: 420px;
             min-height: 100vh;
@@ -100,7 +98,6 @@
         }
         .step-item span { color: rgba(255,255,255,.65); font-size: .85rem; }
 
-        /* ── RIGHT PANEL ── */
         .panel-right {
             flex: 1; display: flex;
             align-items: center; justify-content: center; padding: 2rem;

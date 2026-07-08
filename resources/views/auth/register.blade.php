@@ -188,7 +188,6 @@
                 </button>
             </form>
 
-            {{-- Volta pro dashboard do admin --}}
             <a href="{{ route('admin.dashboard') }}" class="link-voltar">
                 <i class="bi bi-arrow-left me-1"></i>Voltar ao painel
             </a>

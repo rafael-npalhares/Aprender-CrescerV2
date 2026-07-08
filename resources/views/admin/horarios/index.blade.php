@@ -102,7 +102,7 @@
                                 ✏️ Editar
                             </a>
                             <form action="{{ route('admin.grade.destroy', $horario) }}" method="POST"
-                                  onsubmit="return confirm('Remover {{ addslashes($horario->disciplina) }} de {{ $diaLabel }}?')">
+                                  onsubmit="return confirmarAcao(this, 'Tem certeza que deseja remover {{ addslashes($horario->disciplina) }} de {{ $diaLabel }}? Esta ação não pode ser desfeita.', 'Remover horário')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"

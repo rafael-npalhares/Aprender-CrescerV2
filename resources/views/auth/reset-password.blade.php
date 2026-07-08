@@ -28,8 +28,6 @@
             min-height: 100vh;
             display: flex;
         }
-
-        /* ── Painel esquerdo ── */
         .panel-left {
             width: 420px;
             min-height: 100vh;
@@ -96,7 +94,6 @@
         .panel-item .bi { color: var(--blue); font-size: 1.1rem; flex-shrink: 0; }
         .panel-item span { color: rgba(255,255,255,.75); font-size: .85rem; }
 
-        /* ── Painel direito ── */
         .panel-right {
             flex: 1; display: flex;
             align-items: center; justify-content: center; padding: 2rem;
@@ -159,7 +156,6 @@
         }
         .toggle-pw:hover { color: var(--blue); }
 
-        /* Barra de força da senha (igual ao register) */
         .senha-force {
             margin-top: .3rem; margin-bottom: 1rem;
             display: flex; gap: 4px;
@@ -194,7 +190,6 @@
 </head>
 <body>
 
-    {{-- Painel Esquerdo --}}
     <div class="panel-left">
         <div class="brand">
             <div class="brand-icon"><i class="bi bi-mortarboard-fill"></i></div>
@@ -225,7 +220,6 @@
         </div>
     </div>
 
-    {{-- Painel Direito --}}
     <div class="panel-right">
         <div class="reset-card">
 
@@ -276,12 +270,10 @@
                     @enderror
                 </div>
 
-                {{-- Barra de força da senha --}}
                 <div class="senha-force" id="senhaForce">
                     <span></span><span></span><span></span>
                 </div>
-
-                {{-- Confirmar senha --}}
+                
                 <label class="form-label">Confirmar nova senha</label>
                 <div class="input-group-custom">
                     <i class="bi bi-lock-fill input-icon"></i>

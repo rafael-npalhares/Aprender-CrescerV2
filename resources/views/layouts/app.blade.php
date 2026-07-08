@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo', 'Aprender & Crescer')</title>
 
-    {{-- Bootstrap 5 CDN --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    {{-- Google Fonts --}}
+   
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
-    {{-- CSS próprio --}}
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     @stack('styles')
@@ -18,7 +17,6 @@
 
 <div class="layout-wrapper">
 
-    {{-- SIDEBAR --}}
     <aside class="sidebar" id="sidebar">
 
         <div class="sidebar-brand">
@@ -133,10 +131,9 @@
 
     </aside>
 
-    {{-- OVERLAY MOBILE --}}
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-    {{-- CONTEÚDO PRINCIPAL --}}
+
     <div class="main-content">
 
         {{-- TOPBAR --}}
@@ -164,7 +161,6 @@
             </div>
         </header>
 
-        {{-- CONTEÚDO --}}
         <main class="page-content">
             @yield('conteudo')
         </main>
@@ -172,7 +168,6 @@
     </div>
 </div>
 
-{{-- Bootstrap JS --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>

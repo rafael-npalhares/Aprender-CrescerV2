@@ -1,10 +1,7 @@
-/* ============================================
-   APRENDER & CRESCER — app.css
-   ============================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700&display=swap');
 
-/* ── Variáveis ── */
 :root {
   --sidebar-bg:      #1a2238;
   --sidebar-hover:   #253050;
@@ -27,8 +24,6 @@
   --font-main:       'Plus Jakarta Sans', sans-serif;
   --font-display:    'Sora', sans-serif;
 }
-
-/* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -40,21 +35,15 @@ body {
   line-height: 1.6;
 }
 
-/* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
-/* =============================================
-   LAYOUT — Sidebar + Main
-   ============================================= */
 
 .layout-wrapper {
   display: flex;
   min-height: 100vh;
 }
 
-/* SIDEBAR */
 .sidebar {
   width: var(--sidebar-width);
   background: var(--sidebar-bg);
@@ -194,7 +183,6 @@ body {
   text-transform: capitalize;
 }
 
-/* MAIN CONTENT */
 .main-content {
   margin-left: var(--sidebar-width);
   flex: 1;
@@ -203,7 +191,6 @@ body {
   min-height: 100vh;
 }
 
-/* TOPBAR */
 .topbar {
   height: var(--topbar-height);
   background: var(--bg-card);
@@ -261,15 +248,10 @@ body {
   font-size: 13px;
 }
 
-/* PAGE CONTENT */
 .page-content {
   padding: 28px;
   flex: 1;
 }
-
-/* =============================================
-   CARDS
-   ============================================= */
 
 .card {
   background: var(--bg-card);
@@ -292,8 +274,6 @@ body {
   font-weight: 700;
   color: var(--text-main);
 }
-
-/* METRIC CARDS */
 .metric-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -334,10 +314,6 @@ body {
   margin-top: 3px;
 }
 
-/* =============================================
-   TABLES
-   ============================================= */
-
 .table-responsive { overflow-x: auto; }
 
 .table {
@@ -375,9 +351,6 @@ body {
   vertical-align: middle;
 }
 
-/* =============================================
-   BADGES
-   ============================================= */
 
 .badge-custom {
   display: inline-flex;
@@ -393,10 +366,6 @@ body {
 .badge-danger  { background: #fee2e2; color: #b91c1c; }
 .badge-primary { background: #dbeafe; color: #1d4ed8; }
 .badge-secondary { background: #f1f5f9; color: var(--text-muted); }
-
-/* =============================================
-   FORMS
-   ============================================= */
 
 .form-label {
   font-size: 13px;
@@ -445,10 +414,6 @@ body {
 
 .form-group { margin-bottom: 18px; }
 
-/* =============================================
-   BUTTONS
-   ============================================= */
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -483,10 +448,6 @@ body {
 .btn-lg { padding: 12px 24px; font-size: 15px; }
 .btn-icon { padding: 8px; border-radius: 8px; }
 
-/* =============================================
-   ALERTS / FLASH
-   ============================================= */
-
 .alert {
   padding: 12px 16px;
   border-radius: 9px;
@@ -500,10 +461,6 @@ body {
 .alert-danger   { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
 .alert-warning  { background: #fef9c3; color: #b45309; border: 1px solid #fef08a; }
 .alert-info     { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
-
-/* =============================================
-   PAGE HEADER
-   ============================================= */
 
 .page-header {
   display: flex;
@@ -527,10 +484,6 @@ body {
   margin-top: 2px;
 }
 
-/* =============================================
-   UTILITIES
-   ============================================= */
-
 .text-muted-custom { color: var(--text-muted) !important; }
 .text-primary      { color: var(--primary) !important; }
 .fw-600 { font-weight: 600; }
@@ -545,9 +498,6 @@ body {
 .empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .empty-state p { font-size: 14px; }
 
-/* =============================================
-   QUICK ACTIONS
-   ============================================= */
 
 .action-card {
   background: var(--bg-card);
@@ -568,10 +518,6 @@ body {
 }
 .action-card .action-icon { font-size: 28px; margin-bottom: 8px; }
 .action-card .action-label { font-size: 13px; font-weight: 600; }
-
-/* =============================================
-   LOGIN / GUEST PAGE
-   ============================================= */
 
 .guest-page {
   min-height: 100vh;
@@ -675,9 +621,6 @@ body {
 .guest-card .guest-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
 .guest-card .guest-link a:hover { text-decoration: underline; }
 
-/* =============================================
-   RESPONSIVE
-   ============================================= */
 
 @media (max-width: 768px) {
   .sidebar {
@@ -696,10 +639,6 @@ body {
     padding: 16px;
   }
 }
-
-/* =============================================
-   MOBILE TOGGLE
-   ============================================= */
 
 .sidebar-toggle {
   display: none;

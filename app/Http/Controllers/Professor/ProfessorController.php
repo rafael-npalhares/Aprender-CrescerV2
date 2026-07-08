@@ -13,7 +13,7 @@ class ProfessorController extends Controller
     {
         $avisos         = Aviso::where('ativo', true)
                                ->whereIn('visivel_para', ['todos', 'professores'])
-                               ->latest()->take(5)->get();
+                               ->ordenados()->take(5)->get();
 
         $minhasReservas = Reserva::where('professor_id', auth()->id())
                                  ->latest()->take(5)->get();
@@ -25,7 +25,7 @@ class ProfessorController extends Controller
     {
         $avisos = Aviso::where('ativo', true)
                        ->whereIn('visivel_para', ['todos', 'professores'])
-                       ->latest()->paginate(10);
+                       ->ordenados()->paginate(10);
 
         return view('professor.avisos', compact('avisos'));
     }

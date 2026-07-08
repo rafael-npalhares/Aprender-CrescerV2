@@ -57,7 +57,7 @@ class CantinaController extends Controller
     public function createProduto()
     {
         $categorias = CategoriaCantina::orderBy('nome')->get();
-        return view('cantina.produto-form', compact('categorias'));
+        return view('admin.cantina.produto-form', compact('categorias'));
     }
 
     public function storeProduto(Request $request)
@@ -66,7 +66,7 @@ class CantinaController extends Controller
             'categoria_id'       => 'required|exists:categorias_cantina,id',
             'nome'               => 'required|string|max:200',
             'descricao'          => 'nullable|string|max:300',
-            'preco'              => 'required|numeric|min:0',
+            'preco'              => 'required|numeric|min:0|max:9999.99',
             'quantidade_estoque' => 'required|integer|min:0',
             'foto'               => 'nullable|image|max:2048', // 2MB, jpg/png/webp etc.
         ]);
@@ -90,17 +90,19 @@ class CantinaController extends Controller
         return view('admin.cantina.produto-form', compact('produto', 'categorias'));
     }
 
-    // Editar permite mudar nome, preco, quantidade_estoque e agora também a foto
+    // Editar permite mudar categoria, nome, descrição, preço, estoque e foto
     public function updateProduto(Request $request, ProdutoCantina $produto)
     {
         $request->validate([
+            'categoria_id'       => 'required|exists:categorias_cantina,id',
             'nome'               => 'required|string|max:200',
-            'preco'              => 'required|numeric|min:0',
+            'descricao'          => 'nullable|string|max:300',
+            'preco'              => 'required|numeric|min:0|max:9999.99',
             'quantidade_estoque' => 'required|integer|min:0',
             'foto'               => 'nullable|image|max:2048',
         ]);
 
-        $dados = $request->only('nome', 'preco', 'quantidade_estoque');
+        $dados = $request->only('categoria_id', 'nome', 'descricao', 'preco', 'quantidade_estoque');
 
         if ($request->hasFile('foto')) {
             // remove a foto antiga do disco, se existir, antes de salvar a nova
@@ -114,11 +116,11 @@ class CantinaController extends Controller
                          ->with('sucesso', 'Produto atualizado!');
     }
 
-    public function destroyProduto(ProdutoCantina $produto)
+    public function desativarProduto(ProdutoCantina $produto)
     {
         $produto->update(['ativo' => 0]);
         return redirect()->route('admin.cantina.index')
-                         ->with('sucesso', 'Produto removido.');
+                         ->with('sucesso', 'Produto desativado.');
     }
 
     public function ativarProduto(ProdutoCantina $produto)
@@ -126,6 +128,22 @@ class CantinaController extends Controller
         $produto->update(['ativo' => 1]);
         return redirect()->route('admin.cantina.index')
                          ->with('sucesso', 'Produto reativado!');
+    }
+
+    public function excluirProduto(ProdutoCantina $produto)
+    {
+        // Produto já usado em algum pedido não pode ser apagado de verdade,
+        // senão o histórico de pedidos antigos fica quebrado/incompleto.
+        if ($produto->itensPedido()->exists()) {
+            return redirect()->route('admin.cantina.index')
+                             ->with('erro', 'Este produto já foi pedido por alguém e não pode ser excluído permanentemente. Use "Desativar" para tirá-lo da venda.');
+        }
+
+        $this->removerFoto($produto->foto);
+        $produto->delete();
+
+        return redirect()->route('admin.cantina.index')
+                         ->with('sucesso', 'Produto excluído permanentemente.');
     }
 
     public function pedidos()
@@ -218,13 +236,16 @@ class CantinaController extends Controller
         if (!Auth::user()->isAdmin() && $pedido->user_id !== Auth::id()) {
             abort(403, 'Ação não autorizada.');
         }
-        $pedido->cancelarPedido();
+        foreach ($pedido->itens as $item) {
+            $item->produto->increment('quantidade_estoque', $item->quantidade);
+        }
+        $pedido->update(['status' => 'cancelado']);
         return back()->with('sucesso', 'Pedido cancelado.');
     }
 
     public function entregar(PedidoCantina $pedido)
     {
-        $pedido->marcarEntregue();
+        $pedido->update(['status' => 'entregue']);
         return back()->with('sucesso', 'Pedido marcado como entregue!');
     }
 

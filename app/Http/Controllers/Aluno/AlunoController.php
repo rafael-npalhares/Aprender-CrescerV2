@@ -16,7 +16,7 @@ class AlunoController extends Controller
         // Avisos recentes para a listagem normal da dashboard
         $avisos = Aviso::where('ativo', true)
                        ->whereIn('visivel_para', ['todos', 'alunos'])
-                       ->latest()
+                       ->ordenados()
                        ->take(5)
                        ->get();
 
@@ -39,7 +39,7 @@ class AlunoController extends Controller
     {
         $avisos = Aviso::where('ativo', true)
                        ->whereIn('visivel_para', ['todos', 'alunos'])
-                       ->latest()
+                       ->ordenados()
                        ->paginate(10);
 
         return view('aluno.avisos', compact('avisos'));
