@@ -245,11 +245,7 @@
                 <div class="foto-upload-sub">JPG, PNG ou WEBP · Máximo 2MB</div>
             </div>
 
-            <div class="field-hint" style="margin-top:.65rem;">
-                <i class="bi bi-info-circle me-1"></i>
-                A imagem é salva automaticamente em
-                <code style="color:var(--blue-primary);">public/img/cantina/</code>.
-            </div>
+            
         </div>
 
         {{-- ── RODAPÉ ── --}}

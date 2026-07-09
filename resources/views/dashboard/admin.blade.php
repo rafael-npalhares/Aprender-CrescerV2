@@ -325,7 +325,7 @@
     </div>
     <div class="dash-date">
         <i class="bi bi-calendar3 me-1"></i>
-        {{ now()->translatedFormat('l, d \d\e F \d\e Y') }}
+        {{ ucfirst(\Carbon\Carbon::now('America/Sao_Paulo')->locale('pt_BR')->isoFormat('dddd[,] DD [de] MMMM [de] YYYY')) }}
     </div>
 </div>
 
@@ -388,18 +388,14 @@
         <div class="trend"><i class="bi bi-dash"></i> em aberto</div>
     </div>
 
-    <div class="stat-card" style="--accent:#58a6ff">
-        <div class="icon"><i class="bi bi-graph-up-arrow"></i></div>
-        <div class="value">
-            @php
-                $total = $totalAlunos + $totalProfessores;
-                $pct = $totalUsuarios > 0 ? round($total / $totalUsuarios * 100) : 0;
-            @endphp
-            {{ $pct }}%
+    <a href="{{ route('admin.cantina.pedidos') }}" class="stat-card" style="--accent:#d29922; text-decoration:none;">
+        <div class="icon"><i class="bi bi-bag-check-fill"></i></div>
+        <div class="value">{{ $totalPedidosCantinaPendentes }}</div>
+        <div class="label">Pedidos Pendentes</div>
+        <div class="trend {{ $totalPedidosCantinaPendentes > 0 ? 'warn' : '' }}">
+            <i class="bi bi-cup-straw"></i> aguardando retirada na cantina
         </div>
-        <div class="label">Usuários com Perfil</div>
-        <div class="trend up"><i class="bi bi-arrow-up-short"></i> alunos + professores</div>
-    </div>
+    </a>
 
 </div>
 

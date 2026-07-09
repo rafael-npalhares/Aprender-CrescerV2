@@ -87,6 +87,16 @@
                         @error('matricula') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
+                    {{-- Data de nascimento --}}
+                    <div class="form-group">
+                        <label class="form-label" for="data_nascimento">Data de nascimento *</label>
+                        <input type="date" id="data_nascimento" name="data_nascimento"
+                               class="form-control @error('data_nascimento') is-invalid @enderror"
+                               value="{{ old('data_nascimento') }}"
+                               max="{{ now()->format('Y-m-d') }}">
+                        @error('data_nascimento') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
                     {{-- Turma --}}
                     <div class="form-group">
                         <label class="form-label" for="turma_id">Turma</label>
@@ -151,15 +161,18 @@
         document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
         document.querySelector(`[for="role_${value}"]`).classList.add('selected');
 
-        const camposAluno = document.getElementById('campos-aluno');
-        const matricula   = document.getElementById('matricula');
+        const camposAluno    = document.getElementById('campos-aluno');
+        const matricula      = document.getElementById('matricula');
+        const dataNascimento = document.getElementById('data_nascimento');
 
         if (value === 'aluno') {
             camposAluno.style.display = 'block';
             matricula.required = true;
+            dataNascimento.required = true;
         } else {
             camposAluno.style.display = 'none';
             matricula.required = false;
+            dataNascimento.required = false;
         }
     }
 

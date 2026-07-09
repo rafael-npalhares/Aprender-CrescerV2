@@ -88,6 +88,16 @@
                         @error('matricula') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
+                    {{-- Data de nascimento --}}
+                    <div class="form-group">
+                        <label class="form-label" for="data_nascimento">Data de nascimento</label>
+                        <input type="date" id="data_nascimento" name="data_nascimento"
+                               class="form-control @error('data_nascimento') is-invalid @enderror"
+                               value="{{ old('data_nascimento', optional($usuario->aluno?->data_nascimento)->format('Y-m-d')) }}"
+                               max="{{ now()->format('Y-m-d') }}">
+                        @error('data_nascimento') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
                     {{-- Turma — CORREÇÃO P-22 --}}
                     <div class="form-group">
                         <label class="form-label" for="turma_id">Turma</label>

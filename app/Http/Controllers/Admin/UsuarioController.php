@@ -27,12 +27,13 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string|max:200',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|min:8|confirmed',
-            'role'      => 'required|in:admin,professor,aluno,gerente',
-            'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula',
-            'turma_id'  => 'nullable|exists:turmas,id',
+            'name'            => 'required|string|max:200',
+            'email'           => 'required|email|unique:users,email',
+            'password'        => 'required|min:8|confirmed',
+            'role'            => 'required|in:admin,professor,aluno,gerente',
+            'matricula'       => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula',
+            'data_nascimento' => 'required_if:role,aluno|nullable|date|before:today',
+            'turma_id'        => 'nullable|exists:turmas,id',
         ]);
 
         $user = User::create([
@@ -48,9 +49,10 @@ class UsuarioController extends Controller
 
         if ($request->role === 'aluno') {
             Aluno::create([
-                'user_id'   => $user->id,
-                'matricula' => $request->matricula,
-                'turma_id'  => $request->turma_id,
+                'user_id'         => $user->id,
+                'matricula'       => $request->matricula,
+                'turma_id'        => $request->turma_id,
+                'data_nascimento' => $request->data_nascimento,
             ]);
         }
 
@@ -70,12 +72,13 @@ class UsuarioController extends Controller
     public function update(Request $request, User $usuario)
     {
         $request->validate([
-            'name'      => 'required|string|max:200',
-            'email'     => 'required|email|unique:users,email,' . $usuario->id,
-            'role'      => 'required|in:admin,professor,aluno,gerente',
-            'password'  => 'nullable|min:8|confirmed',
-            'matricula' => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula,' . optional($usuario->aluno)->id,
-            'turma_id'  => 'nullable|exists:turmas,id',
+            'name'            => 'required|string|max:200',
+            'email'           => 'required|email|unique:users,email,' . $usuario->id,
+            'role'            => 'required|in:admin,professor,aluno,gerente',
+            'password'        => 'nullable|min:8|confirmed',
+            'matricula'       => 'required_if:role,aluno|nullable|string|max:20|unique:alunos,matricula,' . optional($usuario->aluno)->id,
+            'data_nascimento' => 'required_if:role,aluno|nullable|date|before:today',
+            'turma_id'        => 'nullable|exists:turmas,id',
         ]);
 
         $dados = $request->only('name', 'email', 'role');
@@ -111,9 +114,10 @@ class UsuarioController extends Controller
 
             if (!$alunoAtual) {
                 Aluno::create([
-                    'user_id'   => $usuario->id,
-                    'matricula' => $request->matricula,
-                    'turma_id'  => $request->turma_id,
+                    'user_id'         => $usuario->id,
+                    'matricula'       => $request->matricula,
+                    'turma_id'        => $request->turma_id,
+                    'data_nascimento' => $request->data_nascimento,
                 ]);
             } else {
                 // Atualiza turma sempre que enviada
@@ -122,6 +126,11 @@ class UsuarioController extends Controller
                 // Atualiza matrícula apenas se enviada (evita sobrescrever com null)
                 if ($request->filled('matricula')) {
                     $dadosAluno['matricula'] = $request->matricula;
+                }
+
+                // Atualiza data de nascimento apenas se enviada
+                if ($request->filled('data_nascimento')) {
+                    $dadosAluno['data_nascimento'] = $request->data_nascimento;
                 }
 
                 $alunoAtual->update($dadosAluno);
